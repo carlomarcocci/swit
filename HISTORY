@@ -2,6 +2,9 @@
 # swit Release History
 ########################
 
+Release v3.0        2024-01-22
+    * First release on github
+
 Release v2.3.1      2023-05-12
     * Aggiunta di un limite minimo di valori per la fn_median
 
