@@ -1,0 +1,13 @@
+CREATE DATABASE scintillation;
+USE scintillation;
+CREATE USER IF NOT EXISTS 'writer'@'%' IDENTIFIED BY '$WRITER_DATA_PASSWORD';
+GRANT ALL PRIVILEGES    ON scintillation.*  TO `writer`@`%`;
+CREATE USER IF NOT EXISTS 'ws-reader'@'%'   IDENTIFIED BY '$WSREADER_PASSWORD';
+FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES    ON scintillation.*  TO `ws-reader`@`%`;
+
+CREATE USER IF NOT EXISTS 'grafana'@'%'     IDENTIFIED BY '$GRAFANA_PASS';
+FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES    ON scintillation.*  TO `grafana`@`%`;
+
+

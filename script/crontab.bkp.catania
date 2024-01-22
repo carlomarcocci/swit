@@ -1,0 +1,34 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+0,20,40 * * * * /home/eswua/git/eswuax/script/get_file.sh >> /data/eswuaxdata_v2/dati/backup/crontab_get_file.log 2>&1
+# importer
+#10,25,40,55 * * * * /home/eswua/git/eswuax/importer_nya0/exec_in_cron.sh >> /data/eswuaxdata_v2/dati/backup/nya0/crontab.log 2>&1
+#11,26,41,56 * * * * /home/eswua/git/eswuax/importer_mzs0/exec_in_cron.sh >> /data/eswuaxdata_v2/dati/backup/mzs0/crontab.log 2>&1
+#12,27,42,57 * * * * /home/eswua/git/eswuax/importer_dmc0/exec_in_cron.sh >> /data/eswuaxdata_v2/dati/backup/dmc0/crontab.log 2>&1
+#13,28,43,58 * * * * /home/eswua/git/eswuax/importer_sao0/exec_in_cron.sh >> /data/eswuaxdata_v2/dati/backup/sao0/crontab.log 2>&1
+#15,30,45,00 * * * * /home/eswua/git/eswuax/importer_lyb0p/exec_in_cron.sh >> /data/eswuaxdata_v2/dati/backup/lyb0p/crontab.log 2>&1
+#16,31,46,01 * * * * /home/eswua/git/eswuax/importer_san0p/exec_in_cron.sh >> /data/eswuaxdata_v2/dati/backup/san0p/crontab.log 2>&1
+# backup
+#11 05 * * * /home/eswua/git/eswuax/script/backupdb-all.sh mysql >> /data/eswuaxdata_v2/dati/backup/backupdb.log 2>&1
+#25 22 * * * /home/eswua/git/eswuax/script/backupdb.sh data eswua >> /data/eswuaxdata_v2/dati/backup/backupdb.log 2>&1
+*/1 * * * *  docker exec ionoparser ./load_dir.sh datadb >> /data/swit/logs/importer/ionoparser.log 2>&1

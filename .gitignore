@@ -1,0 +1,6 @@
+*~
+*.swp
+*_out
+.env
+ionoparser/stop.*
+ws/eng/index.html

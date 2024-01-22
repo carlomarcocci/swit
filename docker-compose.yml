@@ -1,0 +1,213 @@
+version: '3'
+services:
+#    data:
+#        container_name: data
+#        image: "mysql:8.0.20"
+#        ports:
+#            - "3306:3306"
+#        volumes:
+#            - $DEPLOYHOME/data/datadir_data:/var/lib/mysql
+#            - ~/git/swit/mydb/my.cnf:/etc/mysql/my.cnf
+#        environment:
+#            MYSQL_ROOT_PASSWORD: $DATA_MYSQL_ROOT_PASSWORD
+#        security_opt:
+#            - seccomp:unconfined
+#        logging:
+#            driver: syslog
+#            options:
+#                tag: "swit_data"
+#        networks:
+#            - default
+#        restart: always
+
+    datapg:
+        container_name: datapg
+        image: "postgres:12.2"
+        volumes:
+            - $DEPLOYHOME/data/datadir_datapg:/var/lib/postgresql/data
+            - /tmp/datapg:/tmp
+        environment:
+            POSTGRES_PASSWORD: $DATAPG_POSTGRES_PASSWORD
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_datapg"
+        ports:
+            - "5432:5432"
+        networks:
+            - default
+        restart: always
+    
+    scintdb:
+        container_name: scintdb
+        image: "timescale/timescaledb:latest-pg14"
+        volumes:
+            - $DEPLOYHOME/data/data_scintdb:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: $SCINTDB_POSTGRES_PASSWORD
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_scintdb"
+        ports:
+            - "5434:5432"
+        networks:
+            - default
+        restart: always
+
+    aispg:
+        container_name: aispg
+        image: "postgres:12.2"
+        volumes:
+            - $DEPLOYHOME/data/datadir_aispg:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: $AISPG_POSTGRES_PASSWORD
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_aispg"
+        ports:
+            - "5433:5432"
+        networks:
+            - default
+        restart: always
+    
+    iparser_tec:
+        container_name: iparser_tec
+        image: marcarlo/ionoparser:v3
+        volumes:
+            - ~/git/swit/ionoparser:/app
+            - $DEPLOYHOME/input/tec_json:/data
+            - $DEPLOYHOME/$DEFAULTBKDIR:/backup
+        environment:
+            IPARSER_SWIT_HOST: "datapg"
+            IPARSER_SWIT_PORT: "5432"
+            IPARSER_SWIT_DB: "swit"
+            IPARSER_SWIT_USER: "switu"
+            IPARSER_SWIT_PASS: $SWITU_PASS
+        working_dir: /app
+        stdin_open: true
+        tty: true        
+        logging:
+           driver: syslog
+           options:
+                tag: "swit_iparser_tec"
+        networks:
+            - default
+        restart: always
+
+    iparser_ais:
+        container_name: iparser_ais
+        image: marcarlo/ionoparser:v3
+        build:
+            context: ./ionoparser
+            dockerfile: Dockerfile
+        volumes:
+            - $HOME/git/swit/ionoparser:/app
+            - $DEPLOYHOME/input/ais:/data
+            - $DEPLOYHOME/$DEFAULTBKDIR:/backup
+        environment:
+            IPARSER_SWIT_HOST: "datapg"
+            IPARSER_SWIT_PORT: "5432"
+            IPARSER_SWIT_DB: "swit"
+            IPARSER_SWIT_USER: "switu"
+            IPARSER_SWIT_PASS: $SWITU_PASS
+        working_dir: /app
+        stdin_open: true
+        tty: true        
+        logging:
+           driver: syslog
+           options:
+                tag: "swit_iparser_ais"
+        networks:
+            - default
+        restart: always
+
+    iparser_scint:
+        container_name: iparser_scint
+        image: marcarlo/ionoparser:v3
+        build:
+            context: ./ionoparser
+            dockerfile: Dockerfile
+        volumes:
+            - $HOME/git/swit/ionoparser:/app
+            - $DEPLOYHOME/input/scint:/data
+            - $DEPLOYHOME/$DEFAULTBKDIR:/backup
+        environment:
+            IPARSER_SWIT_HOST: "datapg"
+            IPARSER_SWIT_PORT: "5432"
+            IPARSER_SWIT_DB: "swit"
+            IPARSER_SWIT_USER: "switu"
+            IPARSER_SWIT_PASS: $SWITU_PASS
+        working_dir: /app
+        stdin_open: true
+        tty: true        
+        logging:
+           driver: syslog
+           options:
+                tag: "swit_iparser_scint"
+        networks:
+            - default
+        restart: always
+
+    iparser_hermes:
+        container_name: iparser_hermes
+        image: marcarlo/ionoparser:v3
+        build:
+            context: ./ionoparser
+            dockerfile: Dockerfile
+        volumes:
+            - $HOME/git/swit/ionoparser:/app
+            - $DEPLOYHOME/input/hermes:/data
+            - $DEPLOYHOME/$DEFAULTBKDIR:/backup
+        environment:
+            IPARSER_SWIT_HOST: "datapg"
+            IPARSER_SWIT_PORT: "5432"
+            IPARSER_SWIT_DB: "swit"
+            IPARSER_SWIT_USER: "switu"
+            IPARSER_SWIT_PASS: $SWITU_PASS
+        working_dir: /app
+        stdin_open: true
+        tty: true        
+        logging:
+           driver: syslog
+           options:
+                tag: "swit_iparser_hermes"
+        networks:
+            - default
+        restart: always
+
+    iparser_hf:
+        container_name: iparser_hf
+        image: marcarlo/ionoparser:v3
+        build:
+            context: ./ionoparser
+            dockerfile: Dockerfile
+        volumes:
+            - $HOME/git/swit/ionoparser:/app
+            - $DEPLOYHOME/input/swesnet_hf:/data
+            - $DEPLOYHOME/$DEFAULTBKDIR:/backup
+        environment:
+            IPARSER_SWIT_HOST: "datapg"
+            IPARSER_SWIT_PORT: "5432"
+            IPARSER_SWIT_DB: "swit"
+            IPARSER_SWIT_USER: "switu"
+            IPARSER_SWIT_PASS: $SWITU_PASS
+        working_dir: /app
+        stdin_open: true
+        tty: true        
+        logging:
+           driver: syslog
+           options:
+                tag: "swit_iparser_hf"
+        networks:
+            - default
+        restart: always
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.18.1.0/24

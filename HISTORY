@@ -1,0 +1,61 @@
+########################
+# swit Release History
+########################
+
+Release v2.3.1      2023-05-12
+    * Aggiunta di un limite minimo di valori per la fn_median
+
+Release v2.3.0      2021-05-11
+    * gestione dei file zip contenti piu di un file
+    * modifica del loaddir in modo da caricare i 60 file in ordine -h
+    * piccolo bug nel load delle dps fixato
+
+Release v2.1.1      2021-05-11
+    * errore nella data read from file .21*
+
+Release v2.1.0      2021-04-29
+    * new swit db on pgsql to manage input file
+
+Release v2.0.7    2021-03-25
+    * bugfix issue #82, ais validate data type_es mod
+
+Release v2.0.6    2021-02-17
+    * Web: doi landing pages
+
+Release v2.0.5    2021-03-16
+    * Bug fixed, air rdf fields high low are hex #81
+    * minor: removed / from filename
+
+Release v2.0.4    2021-02-12
+    * Bug fixed, erroe msg sp insert autoscaled data, issue #78
+
+Release v2.0.3    2021-02-12
+    * Bug fixed: validate date ante 2003, issue #77
+
+Release v2.0.2    2021-01-14
+    * Bug fixed: rdf old format parser, issue #72
+
+Release v2.0.1    2021-01-12
+    * Bug fixed: sao file vuoti salvati in error
+    - Modifiche al web
+    - script di rotate dei logs di iparser
+
+Release v2.0.0    2020-11-03
+    * Nuova versione del sistema. In prod già da agosto
+
+Release v1.1.3    2019-12-02
+    * inserito uno script che uccide provessi di ws-reader sul db con durata superiore al min
+
+Release v1.1.2    2019-11-29
+    * wsstation, vista per le stazioni con lo strumento
+
+Release v1.1.1    2019-11-27
+    * bugfix load_dir
+    * attivazione dello slave
+
+Release v1.1.0    2019-11-20
+    * ws attivi sul db scintillation su [ws-eswuax](http://ws-eswua.rm.ingv.it/scintillation.php/)
+    * acquisisce tutti i dati di scintillazione attualmente prodotti
+    * pubblica i dati tramite grafana sul sito eswuax
+    * backup dei file parsati e non nella san al path /eswuax/swit/backup    
+    

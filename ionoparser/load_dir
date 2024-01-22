@@ -1,0 +1,74 @@
+#!/bin/bash
+
+SYNTAX="
+`basename $0` <stopfile> <pause 0|1> 
+
+    es: $0 stop.ais 1
+"
+if [ -z "$1" ]; then
+    echo "${SYNTAX}"
+    exit
+fi
+if [ -z "$2" ]; then
+    echo "${SYNTAX}"
+    exit
+fi
+
+LOCK=/data/locker
+STOP=./$1
+PAUSE=$2
+
+if [ ! -f $LOCK ]; then
+    touch $LOCK
+    for f in `find /data/ -not -name locker -a -not -name ".*" -a -not -name "*core" -a -not -iname "*.tmp" -a -not -size 0 -type f | sort` ; do
+	    # controlla che il file non modifichi la sua size e quindi che abbia terminato
+	    # di esssere scritto dall'ftp
+        if [ ${PAUSE} -eq 1 ]; then
+	        for (( ; ; ))
+	        do
+    	        bfr=$(stat -c%s "$f")
+    	        sleep 1
+    	        aftr=$(stat -c%s "$f")
+    	        if [ $bfr -eq $aftr ];
+    	        then
+        	        break;
+                fi
+	        done
+        fi
+        ST=`date +%s`
+        INIZIO=`date "+%Y-%m-%dT%T "`
+        FN=`basename $f`
+        FE="${f##*.}"
+        # se il file è zippato, lo estrae e prende il nome del file ottenuto
+        if [[ ${FE} == "gz" ]]; then
+            g=$f
+            f=$(gzip -l ${f} | awk 'NR==2{print $NF}')
+            gunzip ${g}
+        fi
+        if [[ ${FE} == "xz" ]]; then
+            unxz -f ${f}
+            f=${f::-3}
+        fi
+        printf '%-74s' "${INIZIO} ${FN}"
+        PHPOUT=`php iono_parse.php -f ${f} `
+        EN=`date +%s`
+        DUR=$(( EN - ST ))
+        #echo "${DUR}s -> ${FINE} ${PHPOUT}"
+        echo " ${DUR}s ${PHPOUT}"
+        if [ -f $STOP ]; then
+            echo "-------------------------------------------------------------"
+            printf '%s    ' `date "+%Y-%m-%dT%T "`
+            echo "Manually forced stop"
+            echo "-------------------------------------------------------------"
+            break;
+        fi
+    done
+
+    # remove tmp ftp old file from san0p
+    if [ -d /data/san0p ]; then
+        find /data/san0p/ -type f -mtime +1 -iname ".*" -delete
+    fi
+    # remove empty dir
+    find /data/ -mindepth 2 -type d -empty -delete
+    rm -f  $LOCK
+fi

@@ -1,0 +1,95 @@
+<?php
+
+class pgPdo {
+    private $host;
+    private $port;
+    private $user        = 'switu';
+    private $pass;
+    private $db;
+
+    public $conn;
+
+    public function __construct($host, $pn, $db, $usr, $pwd){
+        // set host and db
+        $this -> host   = $host;
+        $this -> port   = $pn;
+        $this -> db     = $db;
+        $this -> user   = $usr;
+        $this -> pass   = $pwd;
+        // Set DSN
+        /// se la porta + da mtysql altrimenti setto postgres
+        $dsn = 'pgsql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->db;
+        // Set options
+        $options = array(
+            PDO::ATTR_PERSISTENT            => true,
+            //PDO::ATTR_AUTOCOMMIT            => true, 
+            PDO::ATTR_ERRMODE               => PDO::ERRMODE_EXCEPTION,
+            PDO::MYSQL_ATTR_INIT_COMMAND    => 'SET NAMES UTF8'
+        );
+        // Create a new PDO instanace
+        try{
+            $this->conn = new PDO($dsn, $this->user, $this->pass, $options);
+//            $this->conn->setAttribute(PDO::ATTR_AUTOCOMMIT,1);
+        }
+        // Catch any errors
+        catch(PDOException $e){
+            $this->error = $e->getMessage();
+            echo "Error pdoconn: ".$this->error."\n";
+            exit;
+        } 
+    }
+
+    public function closeConnection(){
+      $this -> conn = null;
+    }
+    
+}
+
+/*
+class pgPdoUsr {
+    private $host;
+    private $port;
+    private $user;
+    private $pass;
+    private $db;
+
+    public $conn;
+
+    public function __construct($host, $pn, $db, $usr, $pass){
+        // set host and db
+        $this -> host   = $host;
+        $this -> port   = $pn;
+        $this -> user   = $usr;
+        $this -> pass   = $pass;
+        $this -> db     = $db;
+        // Set DSN
+        /// se la porta + da mtysql altrimenti setto postgres
+        $dsn = 'pgsql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->db;
+        //$dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->db;
+        // Set options
+        $options = array(
+            PDO::ATTR_PERSISTENT            => true,
+            //PDO::ATTR_AUTOCOMMIT            => true, 
+            PDO::ATTR_ERRMODE               => PDO::ERRMODE_EXCEPTION,
+            PDO::MYSQL_ATTR_INIT_COMMAND    => 'SET NAMES UTF8'
+        );
+        // Create a new PDO instanace
+        try{
+            $this->conn = new PDO($dsn, $this->user, $this->pass, $options);
+//            $this->conn->setAttribute(PDO::ATTR_AUTOCOMMIT,1);
+        }
+        // Catch any errors
+        catch(PDOException $e){
+            $this->error = $e->getMessage();
+            echo "Error pdoconn: ".$this->error."\n";
+            exit;
+        } 
+    }
+
+    public function closeConnection(){
+      $this -> conn = null;
+    }
+}
+*/
+
+?>
