@@ -1,0 +1,8 @@
+# switdb.yml
+host: eswua.rm.ingv.it
+port: 5432
+database: tecdb
+user: tecu
+timeout: 50
+
+

@@ -1,0 +1,31 @@
+se ci sono valori diversi da questi il file è corrotto e si butta
+
+n/a algoritmo non trova traccia dalla quale ottenere un valore
+no algotitmo trova traccia e decide che il valore non c'è
+
+na        $this -> foF2 = $out[0]['fof2'];
+na        $this -> MUFF2 = $out[0]['muff2'];
+na        $this -> MF2= $out[0]['mf2'];
+na        $this -> fxI = $out[0]['fxi'];
+na no       $this -> foF1 = $out[0]['fof1'];
+no        $this -> ftEs = $out[0]['ftes'];
+no        $this -> hEs = $out[0]['h_es'];
+
+i primi 6 sono il risultato di una identificazione della traccia
+gli aip sono calcoli sulla traccia identificata
+
+aui nel secondo blocco o valore o trattini
+        $this -> hmF2_AIP = $out[0]['aip_hmf2'];
+        $this -> foF2_AIP = $out[0]['aip_fof2'];
+        $this -> foF1_AIP = $out[0]['aip_fof1'];
+        $this -> hmF1_AIP = $out[0]['aip_hmf1'];
+        $this -> D1_AIP = $out[0]['aip_d1'];
+        $this -> foE_AIP = $out[0]['aip_foe'];
+        $this -> hmE_AIP = $out[0]['aip_hme'];
+        $this -> ymE_AIP = $out[0]['aip_yme'];
+        $this -> h_vE_AIP = $out[0]['aip_h_ve'];
+        $this -> Ewidth_AIP = $out[0]['aip_ewidth'];
+        $this -> DelN_vE_AIP = $out[0]['aip_deln_ve'];
+        $this -> B0_AIP = $out[0]['aip_b0'];
+        $this -> B1_AIP = $out[0]['aip_b1'];
+

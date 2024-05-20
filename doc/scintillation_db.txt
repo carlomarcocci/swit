@@ -1,0 +1,88 @@
+Col septentrio      			novatel_gps     		novatel_multi 			  desc
+1   WN              			Week              		WN            			  GPS Week Number
+2   TOW             			TOW             		GPS TOW       			  GPS Time of Week (seconds)
+3   SVID            			PRN             		PRN           			  SAtellite number
+4   RxState         			RxStatus        		              			  Value of the RxState field of the ReceiverStatus SBF block
+5   azimuth    			        Az              		Az            			  Azimuth (degrees)
+6   elevation  			        Elv             		Elv           			  Elevation (degrees)
+7   averageL1       			L1 CNo                	CNo           			  Average Sig1 C/N0 over the last minute (dB-Hz)
+8   totalS4L1       			S4                    	S4            			  Total S4 on Sig1 (dimensionless)
+9   correctionS4L1  			S4 Cor                	S4 Cor        			  Correction to total S4 on Sig1 (thermal noise component only)(dimensionless)
+10  phi01l1         			1SecSigma               1SecSigma     			  Phi01 on Sig1, 1-second phase sigma (radians)
+11  phi03l1         			3SecSigma               3SecSigma     			  Phi03 on Sig1, 3-second phase sigma (radians)
+12  phi10l1         			10SecSigma              10SecSigma    			  Phi10 on Sig1, 10-second phase sigma (radians)
+13  phi30l1         			30SecSigma              30SecSigma    			  Phi30 on Sig1, 30-second phase sigma (radians)
+14  phi60l1slant    			60SecSigma              60SecSigma    			  Phi60 on Sig1, 60-second phase sigma (radians)
+15  avgCCDL1        			Code-Carrier            CMC Avg       			         AvgCCD on Sig1, average of code/carrier divergence (meters)
+16  sigmaCCDL1      			C-CStdev                CMC Std       			         SigmaCCD on Sig1, standard deviation of code/carrier divergence(meters)
+17  tec45           			TEC45                   TEC45         			       TEC at TOW - 45 seconds (TECU)
+18  dtec60_45       			TECRate45               TECRate45     			           dTEC from TOW - 60s to TOW - 45s (TECU)
+19  tec30           			TEC30                   TEC30         			       TEC at TOW - 30 seconds (TECU)
+20  dtec45_30       			TECRate30               TECRate30     			           dTEC from TOW - 45s to TOW - 30s (TECU)
+21  tec15           			TEC15                   TEC15         			      TEC at TOW - 15 seconds (TECU)
+22  dtec30_15       			TECRate15               TECRate15     			           dTECfrom TOW - 30s to TOW - 15s (TECU)
+23  tec0            			TEC0                    TECTOW        			       TEC at TOW (TECU)
+24  dtec0           			TECRate0                TECRateTOW    			            dTEC from TOW - 15s to TOW (TECU)
+25  locktimeL1      			L1 LockTime             Lock Time     			           Sig1 lock time (seconds)
+26  reserved        			chanstatus                		              			  sbf2ismr version number
+27  2ndlocktime     			L2 LockTime             Lock Time     			           Lock time on the second frequency used for the TEC computation(seconds)
+28  avgcn2freqTEC 				L2 CNo					CNo           			     Averaged C/N0 of second frequency used for the TEC computation(dB-Hz)
+29  SI_L1_29        			                		              			  SI Index on Sig1:(10*log10(Pmax)-10*log10(Pmin))/(10*log10(Pmax)+10*log10(Pmin))(dimensionless)
+30  SI_L1_30        			                		              			  SI Index on Sig1, numerator only: 10*log10(Pmax)-10*log10(Pmin) (dB)
+31  pL1             			                		              			  p on Sig1, spectral slope of detrended phase in the 0.1 to 25Hz range (dimensionless)
+32  avg_c_n0_l2c    			                		CNo           			     Average Sig2 C/N0 over the last minute (dB-Hz)
+33  totalS4_L2C     			                		S4            			        Total S4 on Sig2 (dimensionless)
+34  correctionS4_L2C			                		S4 Cor        			        Correction to total S4 on Sig2 (thermal noise component only)(dimensionless)
+35  phi01_l2c       			                		1SecSigma     			            Phi01 on Sig2, 1-second phase sigma (radians)
+36  phi03_l2c       			                		3SecSigma     			            Phi03 on Sig2, 3-second phase sigma (radians)
+37  phi10_l2c       			                		10SecSigma    			            Phi10 on Sig2, 10-second phase sigma (radians)
+38  phi30_l2c											30SecSigma							Phi30 on Sig2, 30-second phase sigma (radians)
+39  phi60_l2c       			                		60SecSigm     			           Phi60 on Sig2, 60-second phase sigma (radians)
+40  avgccd_l2c      			                		CMC Avg       			         AvgCCD on Sig2, average of code/carrier divergence (meters)
+41  sigmaccd_l2c    			                		CMC Std       			         SigmaCCD on Sig2, standard deviation of code/carrier divergence (meters)
+42  locktime_l2c    			                		Lock Time     			           Sig2 lock time (seconds)
+43  SI_L2C_43       			                		              			  SI Index on Sig2 (dimensionless)
+44  SI_L2C_44       			                		              			  SI Index on Sig2, numerator only (dB)
+45  p_l2c           			                		              			  p on Sig2, phase spectral slope in the 0.1 to 25Hz range (dimensionless)
+46  avg_c_n0_l5     			                		CNo           			    Average Sig3 C/N0 over the last minute (dB-Hz)
+47  totalS4_L5      			                		S4            			       Total S4 on Sig3 (dimensionless)
+48  correctionS4_L5 			                		S4 Cor        			       Correction to total S4 on Sig3 (thermal noise component only)(dimensionless)
+49  phi01_l5        			                		1SecSigma     			           Phi01 on Sig3, 1-second phase sigma (radians)
+50  phi03_l5        			                		3SecSigma     			           Phi03 on Sig3, 3-second phase sigma (radians)
+51  phi10_l5        			                		10SecSigma    			           Phi10 on Sig3, 10-second phase sigma (radians)
+52  phi30_l5        			                		30SecSigma    			           Phi30 on Sig3, 30-second phase sigma (radians)
+53  phi60_l5        			                		60SecSigma    			           Phi60 on Sig3, 60-second phase sigma (radians)
+54  avgccd_l5       			                		CMC Avg       			        AvgCCD on Sig3, average of code/carrier divergence (meters)
+55  sigmaccd_l5     			                		CMC Std       			        SigmaCCD on Sig3, standard deviation of code/carrier divergence(meters)
+56  locktime_l5     			                		Lock Time     			          Sig3 lock time (seconds)
+57  SI_L5_57        			                		              			  SI Index on Sig3 (dimensionless)
+58  SI_L5_58        			                		              			  SI Index on Sig3, numerator only (dB)
+59  p_l5            			                		              			  p on Sig3, phase spectral slope in the 0.1 to 25Hz range(dimensionless)
+60  t_l1            			                		              			  T on Sig1, phase power spectral density at 1 Hz (rad^2/Hz)
+61  t_l2c           			                		              			  T on Sig2, phase power spectral density at 1 Hz (rad^2/Hz)
+62  t_l5            			                		              			  T on Sig3, phase power spectral density at 1 Hz (rad^2/Hz)
+																						Freq										Only for GLONASS
+																						SigType										Signal Type for each Satellite System (see file header)
+																ChanStatus
+		tec45_2ndcomb    																TEC45     								
+        dtec60_45_2ndcomb                           								    TECRate45 			
+        tec30_2ndcomb                               								    TEC30     			
+        dtec45_30_2ndcomb                           								    TECRate30 			
+        tec15_2ndcomb                               								    TEC15     			
+        dtec30_15_2ndcomb                           								    TECRate15 			
+        tec0_2ndcomb                                								    TECTOW    			
+        dtec0_2ndcomb                               								    TECRateTOW			
+
+sec_sig ci sono a l1, l2c, l5 che corrispondono        
+le due frequenze utilizzate per il calocolo del tec
+primsig, secsig
+
+galileo se è 1 2 ca nellaprima combinazione del tec
+        altrimenti nella second
+
+gps se 1 4
+    else 17
+    altrimenti butto
+
+glonass se 1 4
+        altrimenti nella seconda

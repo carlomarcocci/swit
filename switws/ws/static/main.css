@@ -1,0 +1,49 @@
+body {
+  background: #fafafa;
+  color: #333333;
+  background-color: #303840;
+  margin-top: 5rem;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: 90px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: whitesmoke;
+}
+
+.content-section{
+  color: darkslategrey;
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 100px;
+  overflow-y: auto;
+}
+
+.language-url, .language-bash {
+  background: #fafafa;
+  color: lightgreen;
+  background-color: #303840;
+  margin-top: 5rem;
+}
+
+table {
+    border-collapse: collapse; 
+    width: auto;
+}
+
+table, th, td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #303842;
+}

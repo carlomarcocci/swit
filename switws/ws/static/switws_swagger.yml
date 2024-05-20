@@ -1,0 +1,402 @@
+openapi: 3.0.0
+info:
+  title: SwitWs - Postgres Service API
+  description: API for connecting to and querying PostgreSQL databases
+  version: 1.0.0
+servers:
+  - url: http://localhost:3300
+  - url: http://eskimo.rm.ingv.it:3300
+paths:
+  /:
+    get:
+      summary: Returns the README content in HTML format
+      tags:
+        - About SwitWs
+      description: |
+        Renders the README content in HTML format.
+      responses:
+        '200':
+          description: Success
+          content:
+            text/html:
+              schema:
+                type: string
+  /swit/:
+    get:
+      summary: Retrieves a list of available database configurations
+      tags:
+        - SwitWs Operations
+      description: |
+        Retrieves a list of available database configurations.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/swit_struct'
+  /swit/{config_file}/:
+    get:
+      summary: Retrieves a list of tables and views from a specific database configuration
+      tags:
+        - SwitWs Operations
+      description: |
+        Retrieves a list of tables and views from a specific database configuration.
+      parameters:
+        - in: path
+          name: config_file
+          description: Name of the database configuration file
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/database_struct'
+        '404':
+          description: Configuration file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+        '403':
+          description: Database connection not established
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+        '422':
+          description: Request error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+  /swit/{config_file}/{table}/:
+    get:
+      summary: Lists table or view fields for specific tables or views in a database
+      tags:
+        - SwitWs Operations
+      description: |
+        Lists table or view fields for specific tables or views in a database.
+      parameters:
+        - in: path
+          name: config_file
+          description: Name of the database configuration file
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: table
+          description: Name of the table
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tables_struct'
+        '404':
+          description: Configuration file not found
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/error_struct'
+        '403':
+          description: Database connection not established
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+  /swit/{config_file}/records/{table}:
+    get:
+      summary: Retrieves records from a specific table in a database
+      tags:
+        - SwitWs Operations
+      description: |
+        Retrieves records from a specific table in a database.
+      parameters:
+        - in: path
+          name: config_file
+          description: Name of the database configuration file
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: table
+          description: Name of the table
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: filter
+          description: |
+            Filter conditions in TreeQL format. Supports multiple filters.
+            
+            > **Clauses**:
+            > - **cs**: contain string (string contains value)
+            > - **sw**: start with (string starts with value)
+            > - **ew**: end with (string end with value)
+            > - **eq**: equal (string or number matches exactly)
+            > - **lt**: lower than (number is lower than value)
+            > - **le**: lower or equal (number is lower than or equal to value)
+            > - **ge**: greater or equal (number is higher than or equal to value)
+            > - **gt**: greater than (number is higher than value)
+            > - **bt**: between (number is between two comma separated values)
+            > - **in**: in (number or string is in comma separated list of values)
+            > - **is**: is null (field contains "NULL" value)
+            
+            > **Syntax**: *{column_name},{clause},{values}*
+             
+            > **Example**: *filter=id,bt,1,5&filter=name,cs,hello*
+          allowReserved: true
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter1
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter2
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter3
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter4
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter5
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter6
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter7
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter8
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter9
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: filter10
+          description: Additional filter conditions. AND condition with *filter*, OR condition with the other tagged filters. Follows the same syntax of *filter*.
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: include
+          description: |
+            Comma separated columns to include in the result. Supports including related entities.
+            
+            > **Example**: *include=name, categories*
+          allowReserved: true
+          schema:
+            type: string
+        - in: query
+          name: order
+          description: |
+            Columns to order by. Supports ordering on multiple columns.
+            
+            > **Sort order**:
+            >  - **asc** - Ascending order (default if sort order is not given)
+            >  - **desc** - Descending order
+             
+            > **Syntax**: *{column_name},{sort_order}*
+            
+            > **Example**: *order=name,desc&order=id*
+          style: form
+          explode: true
+          allowReserved: true
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: size
+          description: |
+            Limit the number of returned records.
+            > **Example**: *size=10*
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/records_struct'
+        '404':
+          description: Configuration file not found
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/error_struct'
+        '403':
+          description: Database connection not established
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+        '422':
+          description: Request error
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/error_struct'
+  /swit/{config_file}/status/:
+    get:
+      summary: Checks the status of a specific database
+      tags:
+        - SwitWs Operations
+      description: |
+        Checks the status of a specific database.
+      parameters:
+        - in: path
+          name: config_file
+          description: Name of the database configuration file
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status_struct'
+        '404':
+          description: Configuration file not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+        '403':
+          description: Database connection not established
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error_struct'
+components:
+  schemas:
+    swit_struct:
+      type: object
+      properties:
+        swit:
+          type: object
+          properties:
+            route:
+              type: string
+            config:
+              type: object
+              properties:
+                allowed_tables:
+                  type: array
+                  items:
+                    type: string
+                clauses_not_allowed:
+                  type: array
+                  items:
+                    type: string
+                validate_between_clause:
+                  type: object
+                default_size:
+                  type: integer
+                  format: int32
+                timeout:
+                  type: integer
+                  format: int32
+    database_struct:
+      type: object
+      properties:
+        config_file:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type: 
+                type: string
+    tables_struct:
+      type: object
+      properties:
+        table:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type: 
+                type: string
+    status_struct:
+      type: object
+      properties:
+        database_status:
+          type: string
+        connection_time:
+          type: string
+        active_queries_count:
+          type: integer
+          format: int32
+        stress_indicator:
+          type: number
+          format: double
+    error_struct:
+      type: object
+      properties:
+          error:
+            type: string
+    records_struct:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            type: object

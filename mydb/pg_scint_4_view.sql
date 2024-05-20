@@ -59,3 +59,15 @@ FROM station s
     LEFT JOIN institution o                 ON o.code   = l.fk_institution
  GROUP BY s.code,s.name,active_since,active_until,s.lat,s.lon,s.h,s.area,s.description,i.name,st.name, h.code,h.url
 ;
+
+CREATE OR REPLACE VIEW ws_max_s4_l1_vert_hl AS
+SELECT
+    trunc(fn_gaugi('ARCTIC', 3), 2) AS max_s4_l1_vert;
+
+CREATE OR REPLACE VIEW ws_max_s4_l1_vert_ml AS
+SELECT
+    trunc(fn_gaugi('MEDITERRANEAN', 3), 2) AS max_s4_l1_vert;
+
+CREATE OR REPLACE VIEW ws_max_s4_l1_vert_ll AS
+SELECT
+    trunc(fn_gaugi('ANTARCTIC', 3), 2) AS max_s4_l1_vert;

@@ -1,0 +1,8 @@
+flask==2.3.2
+flask_limiter==1.4
+Flask-Caching==2.1.0
+pyyaml==6.0
+psycopg2-binary==2.9.6
+gunicorn==21.2.0
+Markdown==3.6
+redis==5.0.3

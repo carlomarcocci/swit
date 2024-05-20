@@ -19,7 +19,6 @@ DBNAME=$1
 # export delle var di ambiente in .env
 export $(cat .env | xargs) && rails c
 
-clear
 # mydb 
 # scintillation
 echo "    - ${DBNAME}"

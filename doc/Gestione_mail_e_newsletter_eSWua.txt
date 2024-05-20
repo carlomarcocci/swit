@@ -1,0 +1,11 @@
+Due gruppi google sono configurati per la gestione della mail eswua@ingv.it e della newsletter eswua.
+
+Il gruppo "gruppo.eswua@ingv.it" gestisce le mail ad eswua@ingv.it e viene utilizzato per tutte le COMUNICAZIONI IN ENTRATA di qualunque utente che scrive alla mail eswua@ingv.it
+Il gruppo è "chiuso" e i membri siamo noi "interni" che riceviamo tutte le mail scritte verso tale indirizzo. Possiamo quindi rispondere alle mail degli utenti dal nostro client con "rispondi a tutti" in modo che la risposta appaia (giustamente) a nome proprio ma con tutti gli utenti "interni" in cc, che restano quindi al corrente della conversazione.
+
+Il gruppo eswuanews@ingv.it gestisce invece SOLO LE NEWSLETTER IN USCITA A TUTTI GLI UTENTI iscitti a questo gruppo. Queste comunicazioni possono essere inviate SOLO entrando nel gruppo google (e non dalla propria mail personale); in tal modo il messaggio risulterà inviato da eswuanews@ingv.it. Abilitati a scrivere queste newsletter dal gruppo sono solo alcuni di noi "interni". 
+Gli utenti esterni non possono scrivere a questo gruppo (se lo dovessero fare ricevono messaggio di errore) e possono automaticamente disiscriversi con una mail vuota a eswuanews+unsubscribe@ingv.it (viene comunicato automaticamente in calce ad ogni mail).
+Quanto riguarda la gestione delle iscrizioni degli utenti a questa mailinglist, si è deciso che avverrà attraverso il gruppo eswua (cioè eswua@ingv.it): l'utente invia richiesta dall'apposito form sul sito -> la richiesta arriva come mail ad eswua@ingv.it -> manualmente si dovrà aggiungere l'utente al gruppo eswuanews@ingv.it. All'aggiunzione del nuovo membro, nel campo messaggio di benvenuto si può scrivere:
+
+"Dear user, you have been added to the eSWua newsletter. Do not reply to this mail. To contact the eSWua group you can send an email to: eswua@ingv.it
+To unsubscribe from this newsletter send a blank email to eswuanews+unsubscribe@ingv.it."

@@ -1,0 +1,7 @@
+# switdb.yml
+host: switdb.rm.ingv.it
+port: 5434
+database: scint
+user: wsreader
+timeout: 50
+

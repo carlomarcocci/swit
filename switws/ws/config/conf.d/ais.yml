@@ -1,0 +1,6 @@
+# ais.yml
+host: eswua.rm.ingv.it
+port: 5433
+database: ais
+user: aisu
+timeout: 50

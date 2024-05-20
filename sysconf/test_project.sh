@@ -10,26 +10,22 @@ if [ -z "$1" ]; then
 fi
 TESTDATA=$1
 
-clear
-
 echo "# ######################################################################"
 echo "    initialize system"
 echo "# ######################################################################"
-./init_project.sh
-echo ""
-echo ""
-echo ""
+
+# ./init_project.sh
+
 echo ""
 echo "# ######################################################################"
 echo "    fill input dir"
 echo "# ######################################################################"
-find ${TESTDATA} .type f -exec cp {} /data/swit/input/ais/ \;
 
-echo ""
-echo ""
-echo ""
+find ${TESTDATA} -type f -exec cp {} /data/swit/input/ais/ \;
+
 echo ""
 echo "# ######################################################################"
 echo "    run iparse to pupulate dbs"
 echo "# ######################################################################"
+
 docker exec iparser_ais ./load_dir stoppa 0

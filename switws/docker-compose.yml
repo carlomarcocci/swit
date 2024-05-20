@@ -1,0 +1,62 @@
+#Aisweb docker-compose.yaml
+version: '3'
+
+services:
+
+  switws:
+    container_name: switws
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    healthcheck:
+      test: /home/healthcheck.sh
+      interval: 60s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - $DEPLOYHOME:/srv                          # Path in which are located webservice and forms
+      - $CONFPATH:/etc/switws/config              # Path in which are located configuration files i.e. yaml database files and conf.d directory for middlewares
+    environment:
+      GRID_POSTGRES_PASSWORD: $GRID_PASSSWORD
+    ports:
+      - '3300:5000'
+    networks:
+      switws:
+        ipv4_address: 172.18.3.100
+    logging:
+        driver: syslog
+        options:
+            tag: "switws_log" 
+    depends_on:
+      - ws_cache
+    restart: always 
+
+  ws_cache:
+    container_name: ws_cache    
+    image: redis:6.2-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 60s
+      timeout: 3s
+      retries: 5
+    ports:
+      - '6379:6379'
+    networks:
+      switws:
+        ipv4_address: 172.18.3.101    
+    volumes: 
+      - $REDIS_DATASTORAGE:/data/redis   
+    logging:
+        driver: syslog
+        options:
+            tag: "log_ws_cache"      
+    command: redis-server --loglevel verbose     
+    restart: always
+
+networks:
+    switws:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.18.3.0/24

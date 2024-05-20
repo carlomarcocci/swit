@@ -247,6 +247,7 @@ class tec_file {
                     " rgec_mean     float       DEFAULT NULL,".
                     " rgec_std      float       DEFAULT NULL,".
                     " jfile         jsonb,".
+                    " modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,".
                     " PRIMARY KEY  (dt)".
                     " );";
             }
@@ -256,6 +257,7 @@ class tec_file {
                     " refresh_rate  float       DEFAULT NULL,".
                     " tec_mean      float       DEFAULT NULL,".
                     " tec_std       float       DEFAULT NULL,".
+                    " modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,".
                     " jfile         jsonb,".
                     " PRIMARY KEY  (dt)".
                     " );";
