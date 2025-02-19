@@ -37,6 +37,8 @@ if [ $ISSAFE -eq 0 ]; then
     # create all database
     echo "create db ${PATTA}/mydb/build-db-sql.sh"
     "${PATTA}/mydb/build-db-sql.sh" | envsubst | docker exec -i datapg  psql -U postgres 
+    # starting switws
+    docker-compose --env-file .env -f switws/docker-compose.yml up -d
 else
     echo "system is up, please check docker-copose ps "
 fi
