@@ -1,0 +1,11 @@
+-- carlo(
+\set ON_ERROR_STOP off
+
+CREATE USER aisu WITH PASSWORD '$AISU_PASS';
+CREATE DATABASE ais OWNER aisu;
+GRANT ALL PRIVILEGES ON DATABASE ais TO aisu;
+
+\set ON_ERROR_STOP on
+\c ais
+-- )carlo
+

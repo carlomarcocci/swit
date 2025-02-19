@@ -1,0 +1,12 @@
+SYNTAX="
+`basename $0` docker_name dbserver
+
+    es: $0 datapg
+"
+
+if [ -z "$1" ]; then
+        echo "${SYNTAX}"
+        exit
+fi
+
+docker run --rm --network=swit_default --link datapg:db -p 8081:8080 -e ADMINER_DESIGN='nette' adminer

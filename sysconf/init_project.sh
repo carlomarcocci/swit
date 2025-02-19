@@ -7,7 +7,7 @@ listipa="   ais \
 "
 
 clear
-PATTA="$HOME/git/swit"
+PATTA=$PWD
 # if .env doesnt exists create it
 if [ ! -f "$PATTA/.env" ]; then
     grep -v '^#' "$PATTA/env.template" >> "$PATTA/.env"
@@ -23,12 +23,11 @@ export $(sed -E '/^\s*#/d; /^\s*$/d' "$PATTA/.env")
 ISSAFE=`docker-compose ps | grep data | wc -l`
 echo "$ISSAFE"
 if [ $ISSAFE -eq 0 ]; then
-    # empty datadir 
-    docker run --rm -v $DEPLOYHOME/data:/data marcarlo/ionoparser rm -rf /data/
-    
-    # turn up docker 
+
+    # start docker container
     docker-compose up -d 
- 
+    
+    sleep 4
     # run wine fon the firse time to let it inizialized and avoid error message
     for i in $listipa ; do
         docker exec iparser_$i wine bin/ParseIsmrWin.exe -h > /dev/null 2>&1
@@ -36,7 +35,10 @@ if [ $ISSAFE -eq 0 ]; then
     done
 
     # create all database
-    ${PATTA}/mydb/create-all-db.sh
+    echo "create db ${PATTA}/mydb/build-db-sql.sh"
+    "${PATTA}/mydb/build-db-sql.sh" | envsubst | docker exec -i datapg  psql -U postgres 
+    # starting switws
+    docker-compose --env-file .env -f switws/docker-compose.yml up -d
 else
     echo "system is up, please check docker-copose ps "
 fi

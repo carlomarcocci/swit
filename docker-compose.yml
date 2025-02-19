@@ -1,33 +1,13 @@
 version: '3'
 services:
-#    data:
-#        container_name: data
-#        image: "mysql:8.0.20"
-#        ports:
-#            - "3306:3306"
-#        volumes:
-#            - $DEPLOYHOME/data/datadir_data:/var/lib/mysql
-#            - ~/git/swit/mydb/my.cnf:/etc/mysql/my.cnf
-#        environment:
-#            MYSQL_ROOT_PASSWORD: $DATA_MYSQL_ROOT_PASSWORD
-#        security_opt:
-#            - seccomp:unconfined
-#        logging:
-#            driver: syslog
-#            options:
-#                tag: "swit_data"
-#        networks:
-#            - default
-#        restart: always
-
     datapg:
         container_name: datapg
-        image: "postgres:12.2"
+        image: "timescale/timescaledb:latest-pg14"
         volumes:
             - $DEPLOYHOME/data/datadir_datapg:/var/lib/postgresql/data
             - /tmp/datapg:/tmp
         environment:
-            POSTGRES_PASSWORD: $DATAPG_POSTGRES_PASSWORD
+            POSTGRES_PASSWORD: $DATAPG_POSTGRES_PASS
         logging:
             driver: syslog
             options:
@@ -38,45 +18,12 @@ services:
             - default
         restart: always
     
-    scintdb:
-        container_name: scintdb
-        image: "timescale/timescaledb:latest-pg14"
-        volumes:
-            - $DEPLOYHOME/data/data_scintdb:/var/lib/postgresql/data
-        environment:
-            POSTGRES_PASSWORD: $SCINTDB_POSTGRES_PASSWORD
-        logging:
-            driver: syslog
-            options:
-                tag: "swit_scintdb"
-        ports:
-            - "5434:5432"
-        networks:
-            - default
-        restart: always
 
-    aispg:
-        container_name: aispg
-        image: "postgres:12.2"
-        volumes:
-            - $DEPLOYHOME/data/datadir_aispg:/var/lib/postgresql/data
-        environment:
-            POSTGRES_PASSWORD: $AISPG_POSTGRES_PASSWORD
-        logging:
-            driver: syslog
-            options:
-                tag: "swit_aispg"
-        ports:
-            - "5433:5432"
-        networks:
-            - default
-        restart: always
-    
     iparser_tec:
         container_name: iparser_tec
-        image: marcarlo/ionoparser:v3
+        image: marcarlo/ionoparser:v4
         volumes:
-            - ~/git/swit/ionoparser:/app
+            - $PWD/ionoparser:/app
             - $DEPLOYHOME/input/tec_json:/data
             - $DEPLOYHOME/$DEFAULTBKDIR:/backup
         environment:
@@ -98,12 +45,9 @@ services:
 
     iparser_ais:
         container_name: iparser_ais
-        image: marcarlo/ionoparser:v3
-        build:
-            context: ./ionoparser
-            dockerfile: Dockerfile
+        image: marcarlo/ionoparser:v4
         volumes:
-            - $HOME/git/swit/ionoparser:/app
+            - $PWD/ionoparser:/app
             - $DEPLOYHOME/input/ais:/data
             - $DEPLOYHOME/$DEFAULTBKDIR:/backup
         environment:
@@ -125,12 +69,9 @@ services:
 
     iparser_scint:
         container_name: iparser_scint
-        image: marcarlo/ionoparser:v3
-        build:
-            context: ./ionoparser
-            dockerfile: Dockerfile
+        image: marcarlo/ionoparser:v4
         volumes:
-            - $HOME/git/swit/ionoparser:/app
+            - $PWD/ionoparser:/app
             - $DEPLOYHOME/input/scint:/data
             - $DEPLOYHOME/$DEFAULTBKDIR:/backup
         environment:
@@ -152,12 +93,9 @@ services:
 
     iparser_hermes:
         container_name: iparser_hermes
-        image: marcarlo/ionoparser:v3
-        build:
-            context: ./ionoparser
-            dockerfile: Dockerfile
+        image: marcarlo/ionoparser:v4
         volumes:
-            - $HOME/git/swit/ionoparser:/app
+            - $PWD/ionoparser:/app
             - $DEPLOYHOME/input/hermes:/data
             - $DEPLOYHOME/$DEFAULTBKDIR:/backup
         environment:
@@ -179,12 +117,9 @@ services:
 
     iparser_hf:
         container_name: iparser_hf
-        image: marcarlo/ionoparser:v3
-        build:
-            context: ./ionoparser
-            dockerfile: Dockerfile
+        image: marcarlo/ionoparser:v4
         volumes:
-            - $HOME/git/swit/ionoparser:/app
+            - $PWD/ionoparser:/app
             - $DEPLOYHOME/input/swesnet_hf:/data
             - $DEPLOYHOME/$DEFAULTBKDIR:/backup
         environment:
@@ -200,80 +135,6 @@ services:
            driver: syslog
            options:
                 tag: "swit_iparser_hf"
-        networks:
-            - default
-        restart: always
-
-    switws:
-        container_name: switws
-        build: 
-            context: ./switws
-            dockerfile: Dockerfile
-        healthcheck:
-            test: /home/healthcheck.sh
-            interval: 60s
-            timeout: 5s
-            retries: 5
-        # image: marcarlo/switwspy:1
-        volumes:
-            - $HOME/git/swit/switws/ws:/srv                             # Webservice and forms 
-            - $HOME/git/swit/switws/ws/config:/etc/switws/config:ro     # Configuration files
-            - /tmp/_switcache_:/srv/__pycache__
-        environment:
-            AIS_POSTGRES_PASSWORD: $WSREADER_AIS_PASSWORD 
-            SCINT_POSTGRES_PASSWORD: $WSREADER_SCINT_PASSWORD
-            TEC_POSTGRES_PASSWORD: $WSREADER_TECDB_PASSWORD
-            HFF_POSTGRES_PASSWORD: $WSREADER_GRID_PASSWORD
-        ports:
-            - '8080:5000'
-        networks:
-            default:
-                ipv4_address: 172.18.1.100
-        logging:
-            driver: syslog
-            options:
-                tag: "swit_switws"
-        depends_on:
-            - wscache
-        restart: always
-
-    wscache:
-        container_name: wscache
-        image: redis:6.2-alpine
-        healthcheck:
-            test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
-            interval: 60s
-            timeout: 3s
-            retries: 5
-        networks:
-            default:
-        #        ipv4_address: 172.18.1.101
-        volumes:
-            - $REDIS_DATASTORAGE:/data/redis
-        logging:
-            driver: syslog
-            options:
-                tag: "swit_wscache"
-        command: redis-server --loglevel verbose
-        restart: always
-
-    wwwconfig:
-        container_name: wwwconfig
-        image: webdevops/php-apache
-        volumes:
-            - ~/git/swit/webstation/html:/var/www/html
-        environment:
-            WSREADER_AIS_PASSWORD: $WSREADER_AIS_PASSWORD
-            WSREADER_SCINT_PASSWORD: $WSREADER_SCINT_PASSWORD
-            WSREADER_TECDB_PASSWORD: $WSREADER_TECDB_PASSWORD
-
-        ports:
-            - "80:80"
-        networks:
-        logging:
-           driver: syslog
-           options:
-                tag: "swit_wwwconfig"
         networks:
             - default
         restart: always

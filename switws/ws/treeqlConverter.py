@@ -4,8 +4,8 @@ from datetime import datetime, time
 import re
 
 class TreeQLToSQLConverter:
-    def __init__(self, allowed_tables, clauses_not_allowed, validate_between_clause):
-        self.allowed_tables = allowed_tables
+    def __init__(self, schema, clauses_not_allowed, validate_between_clause):
+        self.schema = schema
         self.clauses_not_allowed = clauses_not_allowed
         self.validate_between_clause = validate_between_clause
 
@@ -52,12 +52,7 @@ class TreeQLToSQLConverter:
                 if isinstance(self, TreeQLToSQLConverter):
                     # Check table name 
                     if special_chars_pattern.search(args[0]):
-                        raise ValueError("Invalid characters in table field.")
-
-                    # Check if the table is in the required tables list
-                    if self.allowed_tables:
-                        if args[0] not in self.allowed_tables:
-                            raise ValueError(f"Invalid query: table {args[0]} not present or accessible.")     
+                        raise ValueError("Invalid characters in table field.")             
 
                     # Custom check for filters
                     if args[1]:
@@ -120,7 +115,7 @@ class TreeQLToSQLConverter:
                                 raise ValueError("Invalid characters in include fields.")
 
                             # Check for SQL injection patterns
-                            if re.search(r'\bDROP\b|\bDELETE\b|\bTRUNCATE\b|\bALTER\b|\bINSERT\b|\bUPDATE\b', field, re.IGNORECASE):
+                            if re.search(r'\bDROP\b|\bDELETE\b|\bTRUNCATE\b|\bALTER\b|\bINSERT\b|\bUPDATE\b|\bSELECT\b', field, re.IGNORECASE):
                                 raise ValueError('SQL injection detected in include fields.')
 
                     # Check size
@@ -153,17 +148,34 @@ class TreeQLToSQLConverter:
                             # Check for special characters in order_by field
                             if special_chars_pattern.search(order_by_parts[0]):
                                 raise ValueError("Invalid characters in order_by field.")
+
+                    # Check arguments
+                    if args[5]:
+                        for argument in args[5]:
+                            argument_parts = argument.split(',')
+
+                            # Check if the list contains only the least minimum number of elements
+                            if len(argument_parts) != 2:
+                                raise ValueError("Invalid format for argument clause. It should have 2 elements.")
+
+                            # Check for special characters in any argument field
+                            if special_chars_pattern.search(argument_parts[0]):
+                                raise ValueError("Invalid characters in argument field.")
                 
                 return func(self, *args, **kwargs)
             return wrapper
         return decorator  
 
-    @validate_input(str, (dict, type(None)), (str, type(None)), (str, type(None)), (list, type(None)))
-    def convert_query_from_request(self, table, filters=None, include_fields=None, size=None, order_bys=None):
+    @validate_input(str, (dict, type(None)), (str, type(None)), (str, type(None)), (list, type(None)), (list, type(None)))
+    def convert_query_from_request(self, table, filters=None, include_fields=None, size=None, order_bys=None, arguments=None):
         
         sql_filters = self._convert_filters(filters)
 
-        sql_query = f"SELECT {include_fields if include_fields else '*'} FROM {table}"
+        if arguments:
+            sql_arguments = self._convert_arguments(arguments)
+            sql_query = f"SELECT {include_fields if include_fields else '*'} FROM {self.schema}.{table}({sql_arguments})"
+        else:
+            sql_query = f"SELECT {include_fields if include_fields else '*'} FROM {self.schema}.{table}"
 
         if sql_filters:
             sql_query += f" WHERE {sql_filters}"
@@ -221,6 +233,18 @@ class TreeQLToSQLConverter:
         direction = order_by_parts[1] if len(order_by_parts) > 1 else 'ASC'
         return f"{field} {direction}"
 
+    def _convert_arguments(self, arguments):
+
+        sql_arguments = []
+        for argument in arguments:
+            field, value = argument.split(',')
+            # Build {field}:= {value} statement            
+            if value.isdigit():
+                sql_arguments.append(f"{field}:={value}")
+            else:
+                sql_arguments.append(f"{field}:='{value}'")
+        return ', '.join(sql_arguments)
+
     def _build_condition(self, field, treeql_operator, operator, *values):
 
         # Check if value is a date or a string and add quotes accordingly
@@ -238,7 +262,7 @@ class TreeQLToSQLConverter:
             return f"{field} {operator} {sql_values[0]} AND {sql_values[1]}"
 
         elif operator == 'IN' or operator == 'NOT IN':
-            return f"{field} {operator} ({', '.join(sql_values)})"       
+            return f"{field} {operator} ({', '.join(sql_values)})"
 
         elif operator == 'IS NULL' or operator == 'IS NOT NULL':       
             return f"{field} {operator}"

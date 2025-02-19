@@ -1,5 +1,5 @@
 from switws import app
-from forms import LoadConfig
+from extensions import ws_config
 from gunicorn.app.base import BaseApplication
 from urllib.parse import parse_qs
 import multiprocessing
@@ -38,9 +38,6 @@ def post_request(worker, req, environ, resp):
     worker.log.debug("Response Headers: %s" % resp.headers)    
 
 if __name__ == "__main__":
-
-    # Load configuration file to control the execution of each step
-    ws_config = LoadConfig.load_ws_config('ws_configuration')
 
     def number_of_workers():
         return (multiprocessing.cpu_count() * 2) + 1    

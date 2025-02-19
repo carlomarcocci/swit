@@ -18,16 +18,10 @@ function fn_weektow2datetime ($week, $tow){
     $date = date_create(START_GPS_TIME);
     date_add($date, date_interval_create_from_date_string($week.' weeks'));
     date_add($date, date_interval_create_from_date_string($tow.' seconds'));
-/*
-echo "\n".$week;    
-echo "\n".$tow;    
-echo "\n".$date -> format('Y-m-d H:i:s').$millisec;
-die();
-*/
     return $date -> format('Y-m-d H:i:s').$millisec;
 }
 
-function fn_weektow2datetime_nom ($week, $tow){
+function fn_weektow2datetimeNom ($week, $tow){
 /*
     restituisce la data senza i millisecondi
     substr($this -> xmlFile['filename'], 0, strpos($this -> xmlFile['filename'], "_"));
@@ -36,7 +30,6 @@ function fn_weektow2datetime_nom ($week, $tow){
 }
 
 function fn_fileNameToDate ($str, $format){
-//echo "\n__".$str."__\n";
     $ret='';
     try{
         switch ($format){
@@ -695,10 +688,11 @@ function createSepentrioView($sta, $isPG){
         " fn_s4_l2_slant(totalS4_L2C, correctionS4_L2C)                   AS s4_l2_slant, ".
         " fn_phi60_l5_vert(phi60_l5, elevation)                           AS phi60_l5_vert, ".
         " fn_s4_l5_slant(totalS4_L5, correctionS4_L5)                     AS s4_l5_slant, ".
-        " c.nmp_code || CASE WHEN LENGTH(CAST(t.prn AS char)) = 1 
-                             THEN '0' 
-                             ELSE '' || t.prn
-                         END                                                AS PRN".
+        " c.nmp_code::text ||
+          CASE
+              WHEN length(t.prn::character(2)) = 1 THEN '0'::text || t.prn
+              ELSE ''::text || t.prn
+          END AS prn ".
         " FROM ".$sta." d ".
         "     JOIN  station s         ON s.code = '".$sta."' ".
         "     JOIN satellite t        ON t.svid = d.svid ".
@@ -784,10 +778,11 @@ function createNovatelMultiView($sta, $isPG){
         " fn_s4_l2_slant(totalS4_L2C, correctionS4_L2C)                   AS s4_l2_slant,".
         " fn_phi60_l5_vert(phi60_l5, elevation)                           AS phi60_l5_vert,".
         " fn_s4_l5_slant(totalS4_L5, correctionS4_L5)                     AS s4_l5_slant,".
-        " c.nmp_code || CASE WHEN LENGTH(CAST(t.prn AS char)) = 1 
-                             THEN '0' 
-                             ELSE '' || t.prn
-                         END                                                AS PRN".
+        " c.nmp_code::text ||
+          CASE
+              WHEN length(t.prn::character(2)) = 1 THEN '0'::text || t.prn
+              ELSE ''::text || t.prn
+          END AS prn ".
         " FROM ".$sta." d ".
         "     JOIN  station s         ON s.code = '".$sta."' ".
         "     JOIN satellite t        ON t.svid = d.svid ".
@@ -842,10 +837,11 @@ function createNovatelGpsView($sta, $isPG){
         " fn_stec(tec0, tec15, tec30, tec45)                              AS stec,".
         " fn_vtec(tec0, tec15, tec30, tec45, elevation)                   AS vtec,".
         " fn_s4_l1_slant(totalS4L1, correctionS4L1)                       AS s4_l1_slant,".
-        " c.nmp_code || CASE WHEN LENGTH(CAST(t.prn AS char)) = 1 
-                             THEN '0' 
-                             ELSE '' || t.prn
-                         END                                                AS PRN".
+        " c.nmp_code::text ||
+          CASE
+              WHEN length(t.prn::character(2)) = 1 THEN '0'::text || t.prn
+              ELSE ''::text || t.prn
+          END AS prn ".
         " FROM ".$sta." d ".
         "     JOIN  station s         ON s.code = '".$sta."' ".
         "     JOIN satellite t        ON t.svid = d.svid ".
@@ -875,6 +871,76 @@ function fn_createAllView($db){
 function fn_s60___d($fn){
     exec('/usr/bin/wine ./bin/ParseIsmrWin.exe all '.$fn.' ./outta.es', $output, $retval);
  print_r($output); print_r($retval);die();
+}
+
+function fn_trace_xml2json_saoXml($freq, $range){
+    $trace_arr_tmp = array();
+    $appFrequencyList   = preg_replace("/[[:blank:]]+/",",", str_replace("\n", "",$freq));
+    $appRangeList       = preg_replace("/[[:blank:]]+/",",", str_replace("\n", "",$range));
+    // correct starting ending string
+    if (substr($appRangeList, 0, 1)==","){
+        $appRangeList = substr($appRangeList,1);
+    }
+    if (substr($appRangeList,-1)==","){
+        $appRangeList = substr($appRangeList,0,-1);
+    }
+    if (substr($appFrequencyList, 0, 1)==","){
+        $appFrequencyList = substr($appFrequencyList,1);
+    }
+    if (substr($appFrequencyList,-1)==","){
+        $appFrequencyList = substr($appFrequencyList,0,-1);
+    }
+    // creazione degli array
+    $arr = explode(',', $appRangeList);
+    $i=0;
+    foreach($arr as $k) {
+        //$this -> trace_arr[$k] = 'null';
+        $trace_arr_tmp[$i] = array('h' => $k, 'f' => '');
+        $i++;
+    }
+    $arr = explode(',', $appFrequencyList);
+    $i=0;
+    foreach ($trace_arr_tmp as $a) {
+        $trace_arr_tmp[$i]['f'] = $arr[$i];
+        $i++;
+    }
+    #$this->trace_arr = array_merge($trace_arr_tmp, $this->trace_arr);
+    // sort by h
+    usort($trace_arr_tmp, function($a, $b) {
+        return $a['h'] <=> $b['h'];
+    });
+    return (json_encode($trace_arr_tmp, JSON_NUMERIC_CHECK));
+}
+
+function fn_read_ursi_saoXml(SimpleXMLElement $node, $fname){
+    $elemVal='';
+    foreach ($node->URSI as $elem) {
+        $elemName = (string) $elem['Name'];
+        if ( $elemName == $fname) {
+            $elemVal = (string) $elem['Val'];
+            break;
+        }
+    }
+    return($elemVal);
+}
+
+function fn_IsNullOrEmpty($str) {
+    return $str === null || $str == "";
+}
+
+function fn_IsNullOrEmptyLunga($str) {
+    $ret='inizio';
+    if (isset($str)){
+        $ret = " notset";
+    } elseif ($str === null){
+        $ret = " nulla";
+    } elseif ( $str == "") {
+        $ret = " vuota";
+    } else {
+        $ret = " else";
+    }
+    return $ret;
+//    return $str === null || trim($str) === '';
 }
 
 ?>
