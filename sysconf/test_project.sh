@@ -2,7 +2,7 @@
 
 SYNTAX="
 `basename $0` <test-data-path>
-    es: $0 /home/carlo/Downloads/data/test/
+    es: $0 ci_data_files/input/
 "
 if [ -z "$1" ]; then
         echo "${SYNTAX}"
@@ -10,12 +10,7 @@ if [ -z "$1" ]; then
 fi
 TESTDATA=$1
 
-echo "# ######################################################################"
-echo "    initialize system"
-echo "# ######################################################################"
-
-# ./init_project.sh
-
+clear
 echo ""
 echo "# ######################################################################"
 echo "    fill input dir"
@@ -24,7 +19,6 @@ echo "# ######################################################################"
 find ${TESTDATA} -type f -exec cp {} /data/swit/input/ais/ \;
 
 echo ""
-echo "# ######################################################################"
 echo "    run iparse to pupulate dbs"
 echo "# ######################################################################"
 

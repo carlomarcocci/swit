@@ -14,7 +14,7 @@ To configure SwitWs, you need to populate two types of files:
 
 - A YAML configuration file (*ws_configuration*) where you can define timeouts, limiters and other middlewares. These checks include:
     - ```timeout```: Set the timeout of the connection for each worker (default: *120*)
-    - ```requests_per_minute```: this middleware limits the number of requests per minute for each worker (default: *100*)
+    - ```requests_per_minute```: this middleware limits the number of requests per minute for each worker (default: *1000*)
     - ```workers```: this option sets the number of workers, if not provided the number of workers is calculated automatically by considering the server capabilities
     - ```loglevel```: this option sets the loglevel (fields allowed: *'debug'*, *'info'*, *'warning'*, *'error'*, *'critical'*; default: *'debug'*)
     - ```cors_allowed```: this options set the list of CORS allowed (default: all)
@@ -47,15 +47,15 @@ Below is the list of operations that can be performed by accessing a specific ro
     - **Functionality**: Scans the configuration directory for YAML files, loads each file, and extracts database configuration details.  
 - **Get Tables Route** (/swit/```<string:config_file>```/)
     - **Method**: GET
-    - **Description**: Retrieves a list of tables and views from a specific database configuration.
-    - **Functionality**: Connects to the specified database using the provided configuration, fetches table and view information, and filters based on allowed tables if specified. 
+    - **Description**: Retrieves a list of tables, views and tablefuncs from a specific database configuration.
+    - **Functionality**: Connects to the specified database using the provided configuration, fetches table and view information, and filters based on allowed tables and functions if specified. 
 - **Get Table Struct Route** (/swit/```<string:config_file>```/```<path:table>```)
     - **Method**: GET
-    - **Description**: Lists columns and column types for a specific table or view in a database.
+    - **Description**: Lists columns and column types for a specific table or view in a database. For tablefuncs it lists also the arguments and argument types required.
     - **Functionality**: Returns a list of columns and column types for a specific table or view in a database.
 - **Get Records Route** (/swit/```<string:config_file>```/records/```<path:table>?[GET methods]```)
     - **Method**: GET
-    - **Description**: Retrieves records from a specific table in a database.
+    - **Description**: Retrieves records from a specific table, view or tablefunc in a database.
     - **Functionality**: Converts TreeQL queries to SQL, executes the SQL query on the database, and returns the records in JSON format. For this routing are elencated in next section the functionalities.
 - **Database Status Route** (/swit/```<string:config_file>```/status/)
     - **Method**: GET
@@ -230,6 +230,33 @@ Output:
     }
 ```
 
+#### Tablefuncs interrogation
+
+SwitWs supports querying PostgreSQL table functions (tablefuncs), which return sets of records in a format similar to tables. These functions can be invoked via the **Get Records Route**, just like tables and views. To do this, specify the function name in place of the table name and use the "argument" parameter for each required input. All other query parameters (e.g., filters, ordering, sizing, etc...) previously listed for tables and views are also supported.
+
+For example:
+
+```bash
+    GET /records/roles_tablefunc?argument=name,Marco Polo&argument=role,consultant&order=id,desc&size=1
+```
+
+This query calls the *roles_tablefunc* function, passing "Marco Polo" as the name argument and "consultant" as the role argument, while also ordering the results by id in descending order and limiting the response to 1 record.
+
+Output:
+
+```bash
+    {
+        "records":[
+            {
+                "id": 200
+                "birth_date": "09/15/1254"
+                "assigned_to": "Repubblica di Venezia"
+            }
+        ]
+    }
+```
+
+
 ### Input Validation Configuration
 
 To ensure the integrity and security of the incoming queries, you can configure each database configuration YAML file to performs checks ont the query structure and content. In details: 
@@ -241,12 +268,26 @@ Set the ```timeout``` for Postgres connection and query executions.
 - **Configuration**
     - **timeout**: An integer which represents the maximum number of seconds for Postgres connections. If none or not given, is set to a default of 120 seconds.
 
+#### schema
+
+Set the ```schema``` that the objects being queried belong to.
+
+- **Configuration**
+    - **schema**: A string which represents the schema to which the objects to be queried belong. If none or not given, is set to *public*.
+
 #### allowed_tables
 
 The ```allowed_tables``` check allows specifying a list of tables that are allowed to be queried. If no tables are specified or if the list is empty, no restrictions are applied, and queries to all tables are allowed.
 
 - **Configuration**
     - **allowed_tables**: A list of tables that are allowed to be queried. If none or not given, no restrictions are applied.
+
+#### allowed_functions
+
+The ```allowed_functions``` check allows specifying a list of tablefuncs that are allowed to be queried. If no tablefuncs are specified or if the list is empty, no restrictions are applied, and queries to all tablefuncs are allowed.
+
+- **Configuration**
+    - **allowed_functions**: A list of tablefuncs that are allowed to be queried. If none or not given, no restrictions are applied.
 
 #### clauses_not_allowed
 
@@ -286,7 +327,6 @@ HTTP response code        | Message
 404 Not found             | Configuration file not found
 422 Unprocessable entity  | Error performing queries
 422 Unprocessable entity  | Input validations failed
-422 Unprocessable entity  | Cannot read HTTP message 
 422 Unprocessable entity  | Cannot read HTTP message 
 429 Too Many Requests     | Requests exceed the maximum limit
 500 Internal server error | Unknown error 

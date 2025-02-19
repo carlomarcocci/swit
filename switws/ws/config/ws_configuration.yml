@@ -4,10 +4,10 @@
 timeout: 60
 
 # Set the maximum number of requests per minute (per worker), if the filed is none or not provided the Middleware will not be activated
-requests_per_minute: 120
+requests_per_minute: 1000
 
 # Define the number of workers, if the field is none or not provided it will be calculated on the server availability
-# workers: 10
+#workers: 10
 
 # Define the loglevel of access_logs (fields allowed: 'debug', 'info', 'warning', 'error', 'critical')
 loglevel: 'info'

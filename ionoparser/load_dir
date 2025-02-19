@@ -43,7 +43,7 @@ if [ ! -f $LOCK ]; then
         if [[ ${FE} == "gz" ]]; then
             g=$f
             f=$(gzip -l ${f} | awk 'NR==2{print $NF}')
-            gunzip ${g}
+            gunzip -f ${g}
         fi
         if [[ ${FE} == "xz" ]]; then
             unxz -f ${f}

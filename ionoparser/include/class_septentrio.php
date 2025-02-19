@@ -82,7 +82,7 @@ class septentrio_line {
         $dataline = str_getcsv(str_replace(' ', '', $str));
         $dataline = array_map('trim', $dataline);
         /// load member from array
-        $this -> datetime          = fn_weektow2datetime_nom($dataline[0], $dataline[1]);
+        $this -> datetime          = fn_weektow2datetimeNom($dataline[0], $dataline[1]);
         $this -> SVID              = $dataline[2];
         $this -> RxState           = ($dataline[3]=='' || $dataline[3]=='nan')  ? NULL : $dataline[3];
         $this -> azimuth           = ($dataline[4]=='' || $dataline[4]=='nan')  ? NULL : $dataline[4];

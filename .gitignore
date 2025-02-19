@@ -1,5 +1,6 @@
 *~
 *.swp
+*.nogit
 *_out
 .env
 ionoparser/stop.*

@@ -21,6 +21,7 @@ class input_file {
     public $dt_start;            /// path per oò bkup dei file dati
     public $dt_len;            /// path per oò bkup dei file dati
     public $file_type;            /// file type da db swit
+    public $parser_ref;            /// file class name da db swit
 
     public  $sw_conn;                               /// connessione
     public  $sw_host;                               /// host db pg swit
@@ -71,9 +72,11 @@ class input_file {
                         " a.bkup_dir        AS abkup_dir, ".
                         " a.fk_file_type    AS afile_type, ".
                         " b.code            AS bcode, ".
-                        " b.dt_len          AS bdt_len ".
+                        " b.dt_len          AS bdt_len, ".
+                        " t.parser_ref      AS parser_ref ".
                     " FROM file_input a ".
-                        " JOIN dt_format b ON a.fk_dt_format=b.code ".
+                        " JOIN dt_format b ON a.fk_dt_format = b.code ".
+                        " JOIN file_type t ON a.fk_file_type = t.code ".
                     ' WHERE LOWER(SUBSTRING(:filename, a.code_start + 1, a.code_length)) = a.filecode '.
                         " AND :exten SIMILAR TO a.extension;";
         try{
@@ -113,6 +116,7 @@ class input_file {
             $this -> file_type      = $out[0]['afile_type'];
             $this -> dtformat       = $out[0]['bcode'];
             $this -> dt_len         = $out[0]['bdt_len'];
+            $this -> parser_ref     = $out[0]['parser_ref'];
             $this -> datetime       = fn_fileNameToDate(substr($this->name."." .$this->extension,  $this->dt_start, $this->dt_len), $this->dtformat);
         }
         else {
@@ -171,6 +175,9 @@ class input_file {
 
     function parseFile(){
         if ($this -> parseOn){
+        //    $reflectionClass = new ReflectionClass($this->parser_ref);
+        //    $myfile = $reflectionClass->newInstanceArgs($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->db_type, $this->db );
+
             switch ($this->file_type) {
                 case "nov_multi":
                     $myfile = new novam_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->db_type, $this->db);
@@ -201,6 +208,9 @@ class input_file {
                 break;
                 case "hf_ncfc":
                     $myfile = new hf_nc_fc($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
+                break;
+                case "dps4d_xml":
+                    $myfile = new dps4d_xml_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
                 break;
                 default:
                     echo "KO_NO_FILETYPE";
