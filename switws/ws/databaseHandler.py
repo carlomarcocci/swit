@@ -209,16 +209,30 @@ class DatabaseConnector:
             try:
                 self.cursor.execute(query)
                 result = self.cursor.fetchall()
-                column_names = [desc[0] for desc in self.cursor.description]
+                column_names_raw = [desc[0] for desc in self.cursor.description]
+
+                # Applica le modifiche richieste ai nomi delle colonne
+                column_names = []
+                for name in column_names_raw:
+                    if name.lower() == 'prn':
+                        column_names.append('PRN')
+                    elif name.lower() == 'corrections4_l2c':
+                        column_names.append('correctionS4_L2C')
+                    else:
+                        column_names.append(name)
+
                 data = []
 
                 for row in result:
-                    # Convert numeric values to strings
-                    processed_row = [
-                        str(value) if isinstance(value, (int, float, complex)) else value 
-                        for value in row
-                    ]
-                    data.append(dict(zip(column_names, processed_row)))
+                    if self.db_config['database'] == 'scint':
+                        data.append(dict(zip(column_names, row)))
+                    else:
+                        processed_row = [
+                            str(value) if isinstance(value, (float, complex)) else value
+                            for value in row
+                        ]
+                        data.append(dict(zip(column_names, processed_row)))
+
                 return data
 
             except psycopg2.errors.SyntaxError:
@@ -226,7 +240,7 @@ class DatabaseConnector:
             except psycopg2.ProgrammingError:
                 raise ValueError("Invalid table/column names or incorrect data types")
             except psycopg2.extensions.QueryCanceledError:
-                raise ValueError("Query timed out")                
+                raise ValueError("Query timed out")
             except (psycopg2.Error, psycopg2.DatabaseError, AttributeError):
                 raise ValueError("Error executing the query")
         else:

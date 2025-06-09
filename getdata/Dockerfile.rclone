@@ -1,0 +1,25 @@
+FROM debian:bookworm-slim  
+
+ENV DEBIAN_FRONTEND=noninteractive  
+
+RUN apt-get -q update && apt-get upgrade -y 
+RUN apt-get install -y \
+      rsync \
+      rclone \
+      wget \
+      sshfs \
+      bash
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/* 
+
+# create user and group 
+RUN groupadd -g 6666 eswua
+RUN useradd eswua -u 6666 -g 6666 -m -s /bin/bash
+
+#CMD ["./compiled/main"]
+#
+# docker commit 
+# docker images
+# docker tag 38ace96e53ba gingv:0.3
+# docker image save gingv:0.3 > /home/carlo/Downloads/data/gingv.0.3.tar 
+# docker load -i gingv.0.3.tar

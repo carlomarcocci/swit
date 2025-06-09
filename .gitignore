@@ -3,5 +3,6 @@
 *.nogit
 *_out
 .env
+docker-compose.yml
 ionoparser/stop.*
 ws/eng/index.html

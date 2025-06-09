@@ -441,6 +441,16 @@ function createAisAutoTable($sta, $isPG){
     return $sql;
 }
 
+function createAisAutoView($sta, $isPG){
+        $sql ="  CREATE OR REPLACE VIEW  ws".$sta."_auto AS ".
+        " SELECT ".
+            " d.*, ".
+            " fn_median('" .$sta . "_auto'::regclass, 'd.fof2'::text, (0)::double precision, (100)::double precision, d.dt, 14, 27) AS fof2_med_27_days ".
+        " FROM ".$sta."_auto AS d ".
+        ";";
+    return $sql;
+} 
+
 function createAisRevTable($sta, $isPG){
             $sql =" CREATE TABLE ".$sta."_rev (".
                 " dt                timestamp,".
@@ -523,6 +533,53 @@ function createAisDpsTable($sta, $isPG){
 
     return $sql;
 }
+
+function createAisDpsView_TOREMOVE($sta, $isPG){
+        $sql ="  CREATE OR REPLACE VIEW  ws".$sta." AS ".
+        " SELECT ".
+            " d.dt, ".
+            " d.station, ".
+            " d.fromfile, ".
+            " d.producer, ".
+            " d.evaluated, ".
+            " d.fof2, ".
+            " d.fof2_eval, ".
+            " d.muf3000f2, ".
+            " d.muf3000f2_eval, ".
+            " d.m3000f2, ".
+            " d.m3000f2_eval, ".
+            " d.fxi, ".
+            " d.fxi_eval, ".
+            " d.fof1, ".
+            " d.fof1_eval, ".
+            " d.ftes, ".
+            " d.ftes_eval, ".
+            " d.h_es, ".
+            " d.h_es_eval, ".
+            " d.aip_hmf2, ".
+            " d.aip_fof2, ".
+            " d.aip_fof1, ".
+            " d.aip_hmf1, ".
+            " d.aip_d1, ".
+            " d.aip_foe, ".
+            " d.aip_hme, ".
+            " d.aip_yme, ".
+            " d.aip_h_ve, ".
+            " d.aip_ewidth, ".
+            " d.aip_deln_ve, ".
+            " d.aip_b0, ".
+            " d.aip_b1, ".
+            " d.tec_bottom, ".
+            " d.tec_top, ".
+            " d.profile, ".
+            " d.trace, ".
+            " d.modified, ".
+            " fn_median('" .$sta . "'::regclass, 'd.fof2'::text, (0)::double precision, (100)::double precision, d.dt, 14, 27) AS fof2_med_27_days ".
+        " FROM ".$sta." AS d ".
+        ";";
+    return $sql;
+}
+
 
 function createHf_ncfcTableRIMOSSA($sta, $isPG){
             $sql =" CREATE TABLE ".$sta."_auto (".

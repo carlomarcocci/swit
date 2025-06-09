@@ -2,6 +2,15 @@
 # swit Release History
 ########################
 
+Release v3.1.0      2025-06-09
+    * dockerizzazione degli script di scarico dati
+    * creazione delle viste insieme alle tabelle per ais
+
+Release v3.0      2025-05-09
+    * swutws nella prima versione a sostituire le api php
+    * dati di scintillazione su tsdb
+    * ionosonda dpd4d
+
 Release v2.3.1      2023-05-12
     * Aggiunta di un limite minimo di valori per la fn_median
 

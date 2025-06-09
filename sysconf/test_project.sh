@@ -23,3 +23,5 @@ echo "    run iparse to pupulate dbs"
 echo "# ######################################################################"
 
 docker exec iparser_ais ./load_dir stoppa 0
+# per il workaround dei file zippati di dps4d
+docker exec iparser_ais ./load_dir stoppa 0

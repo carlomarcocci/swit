@@ -97,7 +97,8 @@ class dps4d_xml_file {
             if (isset($file_xml->SAORecord->ProfileList)) {
                 foreach($file_xml->SAORecord->ProfileList ->children() as $child) {
                     // print_r($child->Tabulated->AltitudeList);
-                    $this -> density_json = fn_trace_xml2json_saoXml($child->Tabulated->AltitudeList['0'], $child->Tabulated->ProfileValueList['0']);
+                    // $this -> density_json = fn_trace_xml2json_saoXml($child->Tabulated->AltitudeList['0'], $child->Tabulated->ProfileValueList['0']);
+                    $this -> density_json = fn_trace_xml2json_saoXml($child->Tabulated->ProfileValueList['0'], $child->Tabulated->AltitudeList['0']);
                 } // foreach profile ihild
             } 
             
@@ -156,6 +157,20 @@ class dps4d_xml_file {
                 echo "ERROR CONNECTIN DB ";
 //                retrn ;
             }
+            $sql = createAisAutoView($this -> station, $this->isPostgres);
+            try{
+                //$stmt = $this -> myconn -> conn -> prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $stmt = $this -> myconn -> conn -> prepare($sql);
+                $stmt->execute();
+                $out = $stmt -> fetchAll();
+                $stmt->closeCursor();
+            }
+            catch (PDOException $e) {
+                fn_debug_query_e($sql, $appo, $out, $e);
+                $stmt->closeCursor();
+                echo "ERROR CONNECTIN DB ";
+                return ;
+            }            
         }
         /// tolgo il path dal nome del file
         $fname = pathinfo($this->filename)['filename'];

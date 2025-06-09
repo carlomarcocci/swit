@@ -1,0 +1,50 @@
+# grid.yml
+host: switdb.rm.ingv.it
+port: 5433
+database: grid
+user: wsgrid
+timeout: 50
+
+# Middlewares
+
+# Define the list of allowed tables to query; if none or not given, no restrictions are applied
+allowed_tables: 
+  - 'vt_lt_fof'
+  - 'vt_nc_fof'
+  - 'vt_lt_muf'
+  - 'vt_nc_muf'
+  - 'last_lt_map'
+
+# Define an array of clauses not allowed in the WHERE conditions
+clauses_not_allowed: 
+  - 'is'
+  - 'nis'
+  - 'nbt'
+  - 'in'
+  - 'nin'
+
+# Insert a default value to limit the size of the requests.
+# If the size exceeds the default value or not limit clause is given, takes the dafult value
+# default_size: 10
+
+# Enable validation on bt clause. 
+# The middleware checks for the presence of 'eq' clause or 'bt' clause bounded by the given limits
+# If the conditions are not satisfied check if the size clause respects the max limit size
+validate_between_clause:
+  tables: 
+    - 'vt_lt_fof'
+    - 'vt_nc_fof'
+    - 'vt_lt_muf'
+    - 'vt_nc_muf'
+  columns: 
+        # Define the column name that require a date between two values
+      - column_name: 'dt'
+        # Define the type of variable to check (supported: time, datetime, time, numeric)
+        type: 'datetime'
+        # Define the format string to be allowed, if numeric leave the field blank
+        format_string: '%Y/%m/%d %H:%M:%S'
+        # Define the maximum difference allowed between the two values
+        max_difference: 3600   
+        # Define the column name that require a date between two values
+  size_max: 5
+

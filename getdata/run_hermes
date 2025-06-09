@@ -1,0 +1,18 @@
+#export DEPLOYHOME=/mnt/sandata/prod/swit
+#export STORAGE=/mnt/sandata/data/hermes
+export DEPLOYHOME=/data/swit
+export STORAGE=/data/swit/data/hermes
+
+docker run --rm -it \
+    --name hermes \
+    -w /app \
+    -v /home/carlo/swit/getdata:/app \
+    -v $HOME/ssheswuax:/root/.ssh \
+    -v $STORAGE:/mnt/hermes \
+    -v $DEPLOYHOME/input/hermes:/mnt/input \
+    -e TOUT=10 \
+    -e DAYCLEAR=7 \
+    -e DRYRUN=1 \
+    -e VERBOSE=1 \
+    marcarlo/hermesoldssh 
+

@@ -6,12 +6,10 @@
 DBLIST="swit scint ais tecdb"
 DBNAME=$1
 
-# export delle var di ambiente in .env
+# export  .env enviroment variables
 set -a
 . .env
 set +a
-
-#echo "docker exec -i $DBHOST psql -U postgres"
 
 for DBNAME in $DBLIST ; do
     echo "SELECT ' $DBNAME' AS DB_SEPARATOR;"
@@ -19,6 +17,6 @@ for DBNAME in $DBLIST ; do
         echo "SELECT 'SOURCE_FILE $i' AS sourcefile;"
         cat $i | envsubst
     done
-#    cat mydb/db_generic_function.sql | envsubst
-#exit    
+    echo "\\c $DBNAME"
+    cat ./mydb/db_generic_function.sql | envsubst
 done

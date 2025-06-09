@@ -1,6 +1,7 @@
 # ais.yml
 host: 172.17.0.1
+#host: switdb.rm.ingv.it
 port: 5432
 database: ais
-user: aisu
+user: wsreader
 timeout: 50

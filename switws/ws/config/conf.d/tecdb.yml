@@ -1,8 +1,9 @@
 # switdb.yml
 host: 172.17.0.1
+#host: switdb.rm.ingv.it
 port: 5432
 database: tecdb
-user: tecu
+user: wsreader
 timeout: 50
 
 

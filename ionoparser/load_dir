@@ -49,18 +49,29 @@ if [ ! -f $LOCK ]; then
             unxz -f ${f}
             f=${f::-3}
         fi
-        printf '%-74s' "${INIZIO} ${FN}"
-        PHPOUT=`php iono_parse.php -f ${f} `
-        EN=`date +%s`
-        DUR=$(( EN - ST ))
-        #echo "${DUR}s -> ${FINE} ${PHPOUT}"
-        echo " ${DUR}s ${PHPOUT}"
-        if [ -f $STOP ]; then
-            echo "-------------------------------------------------------------"
-            printf '%s    ' `date "+%Y-%m-%dT%T "`
-            echo "Manually forced stop"
-            echo "-------------------------------------------------------------"
-            break;
+
+        # workaround rapido per la presenza di file zip contententi piu files
+        # quando viene trovato il file zip viene semplicemente estratto e i file in esso
+        # contenuti vengono gestiti al passaggio successivo
+        if [[ ${FE} == "zip" ]]; then
+            mkdir -p /data/unzipped
+            mkdir -p /backup/zip_toremove
+            unzip -o -qq ${f} -d /data/unzipped/
+            mv ${f} /backup/zip_toremove/
+        else
+            printf '%-74s' "${INIZIO} ${FN}"
+            PHPOUT=`php iono_parse.php -f ${f} `
+            EN=`date +%s`
+            DUR=$(( EN - ST ))
+            #echo "${DUR}s -> ${FINE} ${PHPOUT}"
+            echo " ${DUR}s ${PHPOUT}"
+            if [ -f $STOP ]; then
+                echo "-------------------------------------------------------------"
+                printf '%s    ' `date "+%Y-%m-%dT%T "`
+                echo "Manually forced stop"
+                echo "-------------------------------------------------------------"
+                break;
+            fi
         fi
     done
 

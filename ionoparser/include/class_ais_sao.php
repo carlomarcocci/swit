@@ -152,6 +152,20 @@ class ais_sao_file
                 echo "ERROR CONNECTIN DB ";
                 return ;
             }
+            $sql = createAisAutoView($this -> station, $this->isPostgres);
+            try{
+                //$stmt = $this -> myconn -> conn -> prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+                $stmt = $this -> myconn -> conn -> prepare($sql);
+                $stmt->execute();
+                $out = $stmt -> fetchAll();
+                $stmt->closeCursor();
+            }
+            catch (PDOException $e) {
+                fn_debug_query_e($sql, $appo, $out, $e);
+                $stmt->closeCursor();
+                echo "ERROR CONNECTIN DB ";
+                return ;
+            }
         }
         /// tolgo il path dal nome del file
         $fname = pathinfo($this->filename)['filename'];

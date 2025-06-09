@@ -1,0 +1,63 @@
+version: '3'
+services:
+    datapg:
+        container_name: datapg
+        image: "postgres:12.2"
+        volumes:
+            - $DEPLOYHOME/data/datadir_datapg:/var/lib/postgresql/data
+            - /tmp/datapg:/tmp
+        environment:
+            POSTGRES_PASSWORD: $DATAPG_POSTGRES_PASSWORD
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_datapg"
+        ports:
+            - "5432:5432"
+        networks:
+            - default
+        restart: always
+
+    scintdb:
+        container_name: scintdb
+        image: "timescale/timescaledb:latest-pg14"
+        volumes:
+            - $DEPLOYHOME/data/datadir_scintdb:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: $SCINTDB_POSTGRES_PASSWORD
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_scintdb"
+        ports:
+            - "5434:5432"
+        networks:
+            - default
+        restart: always
+
+    aispg:
+        container_name: aispg
+        image: "postgres:12.2"
+        volumes:
+            - $DEPLOYHOME/data/datadir_aispg:/var/lib/postgresql/data
+            - /tmp/aispg:/tmp
+        environment:
+            POSTGRES_PASSWORD: $AISPG_POSTGRES_PASSWORD
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_aispg"
+        ports:
+            - "5433:5432"
+        networks:
+            - default
+        restart: always
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+
+            driver: default
+            config:
+                - subnet: 172.18.1.0/24

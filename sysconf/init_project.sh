@@ -8,6 +8,7 @@ listipa="   ais \
 
 clear
 PATTA=$PWD
+
 # if .env doesnt exists create it
 if [ ! -f "$PATTA/.env" ]; then
     grep -v '^#' "$PATTA/env.template" >> "$PATTA/.env"
@@ -20,12 +21,12 @@ export $(sed -E '/^\s*#/d; /^\s*$/d' "$PATTA/.env")
 #export -p | grep PASS
 
 # check existing system running
-ISSAFE=`docker-compose ps | grep data | wc -l`
+ISSAFE=`docker-compose --env-file .env -f docker-compose.all.yml ps | grep datapg | wc -l`
 echo "$ISSAFE"
 if [ $ISSAFE -eq 0 ]; then
 
     # start docker container
-    docker-compose up -d 
+    docker-compose --env-file .env -f docker-compose.all.yml up -d 
     
     sleep 4
     # run wine fon the firse time to let it inizialized and avoid error message
@@ -36,9 +37,11 @@ if [ $ISSAFE -eq 0 ]; then
 
     # create all database
     echo "create db ${PATTA}/mydb/build-db-sql.sh"
-    "${PATTA}/mydb/build-db-sql.sh" | envsubst | docker exec -i datapg  psql -U postgres 
+    "${PATTA}/mydb/build-db-sql.sh" | grep -v ON_ERROR_STOP | envsubst | docker exec -i datapg  psql -U postgres 
+    #"${PATTA}/mydb/build-db-sql.sh" | envsubst | docker exec -i datapg  psql -U postgres 
+
     # starting switws
-    docker-compose --env-file .env -f switws/docker-compose.yml up -d
+    docker-compose --env-file .env -f switws/docker-compose.ws.yml up -d
 else
-    echo "system is up, please check docker-copose ps "
+    echo "system is up, please check docker-compose --env-file .env -f docker-complete.yml ps  "
 fi

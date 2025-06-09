@@ -8,15 +8,15 @@ services:
             - $PWD/switws/ws/config:/etc/switws/config:ro     # Configuration files
             - /tmp/_switcache_:/srv/__pycache__
         environment:
-            AIS_POSTGRES_PASSWORD: $WSREADER_PASS
-            SCINTILLATION_POSTGRES_PASSWORD: $WSREADER_PASS
-            TECDB_POSTGRES_PASSWORD: $WSREADER_PASS
-            HFF_POSTGRES_PASSWORD: $WSREADER_PASS
+            AIS_POSTGRES_PASSWORD: $AIS_USER_PASSWORD
+            SCINTILLATION_POSTGRES_PASSWORD: $SCINT_USER_PASSWORD
+            TECDB_POSTGRES_PASSWORD: $TECDB_USER_PASSWORD
+            HFF_POSTGRES_PASSWORD: $HFF_USER_PASSWORD
         ports:
             - '8080:5000'
         networks:
             default:
-        #        ipv4_address: 172.18.1.100
+                ipv4_address: 172.18.10.102
         logging:
             driver: syslog
             options:

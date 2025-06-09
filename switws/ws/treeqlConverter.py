@@ -74,7 +74,7 @@ class TreeQLToSQLConverter:
                                     raise ValueError(f"Invalid operator '{filter_elements[1]}' in filter.")
 
                                 # Check length of filter elements
-                                if len(filter_elements) != 3 and filter_elements[1] not in ['bt', 'nbt', 'in', 'nin', 'is', 'nis']:
+                                if filter_elements[1] not in ['bt', 'nbt', 'in', 'nin', 'is', 'nis'] and len(filter_elements) != 3:
                                     raise ValueError("Invalid number of elements in filter: Each filter should contain exactly 3 elements separated by comma.")
 
                                 # Check for valid number of elements for certain operators
