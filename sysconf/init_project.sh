@@ -28,7 +28,7 @@ if [ $ISSAFE -eq 0 ]; then
     # start docker container
     docker-compose --env-file .env -f docker-compose.all.yml up -d 
     
-    sleep 4
+    sleep 20
     # run wine fon the firse time to let it inizialized and avoid error message
     for i in $listipa ; do
         docker exec iparser_$i wine bin/ParseIsmrWin.exe -h > /dev/null 2>&1
@@ -40,8 +40,6 @@ if [ $ISSAFE -eq 0 ]; then
     "${PATTA}/mydb/build-db-sql.sh" | grep -v ON_ERROR_STOP | envsubst | docker exec -i datapg  psql -U postgres 
     #"${PATTA}/mydb/build-db-sql.sh" | envsubst | docker exec -i datapg  psql -U postgres 
 
-    # starting switws
-    docker-compose --env-file .env -f switws/docker-compose.ws.yml up -d
 else
     echo "system is up, please check docker-compose --env-file .env -f docker-complete.yml ps  "
 fi

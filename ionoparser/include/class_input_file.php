@@ -118,6 +118,7 @@ class input_file {
             $this -> dt_len         = $out[0]['bdt_len'];
             $this -> parser_ref     = $out[0]['parser_ref'];
             $this -> datetime       = fn_fileNameToDate(substr($this->name."." .$this->extension,  $this->dt_start, $this->dt_len), $this->dtformat);
+            //echo substr($this->name."." .$this->extension,  $this->dt_start, $this->dt_len);
         }
         else {
             echo "KO_FILENAME_NOTFOUND_IN_SWITDB ";
@@ -187,17 +188,17 @@ class input_file {
                 break;
                 case "ais_rdf":
                     $myfile = new ais_rdf_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->db_type, $this->db);
-               break;
-               case "ais_sao":
+                break;
+                case "ais_sao":
                     $myfile = new ais_sao_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
                 break;
                 case "dps_auto":
                     $myfile = new dps_sao_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
                 break;
-               case "ais_rev":
+                case "ais_rev":
                     $myfile = new ais_rev_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
                 break;
-        case "ismr_sept":
+                case "ismr_sept":
                     $myfile = new septentrio_file($this->filename, $this->myconn, $this->codestation, $this->name.'.'.$this->extension, $this->db_type, $this->db);
                 break;
                 case "tec_ncfc":
@@ -212,6 +213,13 @@ class input_file {
                 case "dps4d_xml":
                     $myfile = new dps4d_xml_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
                 break;
+                case "eu_tid":
+                    $myfile = new stf_eu_lstid_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
+                break;
+                case "dps4d_sbf":
+                    $myfile = new dps4d_sbf_file($this->filename, $this->myconn, $this->codestation, $this->name.".".$this->extension, $this->datetime, $this->db_type, $this->db);
+                break;
+
                 default:
                     echo "KO_NO_FILETYPE";
                     $this -> backupfile('filetype_error');

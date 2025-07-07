@@ -122,6 +122,7 @@ rm041	rm041	6	rdf	\N	AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_rdf	0	5
 bbj3r	bbj3r	6	rdf	\N	AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_rdf	0	5
 tuj2o	tuj2z	6	rdf	\N	AI0	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_rdf	0	5
 gm037	gm037	6	rdf	\N	AI0	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_rdf	0	5
+gm037	gm037	6	sbf	\N	AI0	datapg	5432	ais	1	1	ais	pg	aisu	password	dps4d_sbf	0	5
 tuj2o	tuj2o	6	rdf	\N	AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_rdf	0	5
 fcmr0	fcmr0	6	json		TE0	datapg	5432	ais	1	1	ais	pg	aisu	password	hf_ncfc	0	5
 fcmv0	fcmv0	6	json		TE0	datapg	5432	ais	1	1	ais	pg	aisu	password	hf_ncfc	0	5
@@ -129,6 +130,7 @@ ncmv0	ncmv0	6	json		TE0	datapg	5432	ais	1	1	ais	pg	aisu	password	hf_ncfc	0	5
 ml10l	ml10l	6	rdf		AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_rdf	0	5
 ncmr0	ncmr0	6	json		TE0	datapg	5432	ais	1	1	ais	pg	aisu	password	hf_ncfc	0	5
 so148	so148	6	sao		AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	dps_auto	0	5
+so148	so148	6	sbf		AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	dps4d_sbf	0	5
 so148	so148	6	xml		AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	dps4d_xml	0	5
 ml10l	ml10l	6	txt		AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_auto	0	5
 ml10l	ml10l	6	xml		AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_sao	0	5
@@ -145,9 +147,10 @@ nc_gl	nc_gl	28	json	\N	TE0	datapg	5432	tecdb	1	1	tecdb	pg	tecu	password	tec_ncfc
 ltf_gl	ltf_gl	28	json	\N	TE0	datapg	5432	tecdb	1	1	tecdb	pg	tecu	password	tec_ncfc	9	6
 nc_eu	nc_eu	27	json	\N	TE0	datapg	5432	tecdb	1	1	tecdb	pg	tecu	password	tec_ncfc	9	5
 sf_med	stfmed	30	json		TE0	eswua.rm.ingv.it	5432	tecdb	1	1	tecdb	pg	tecu	password	tec_ncfc	9	6
+eu_tid	stf_eu_lstid	13	json	\N	TE0	datapg	5432	tecdb	1	1	tecdb	pg	tecu	password	eu_tid	0	12
 tuj2o	tuj2o	6	gif	\N	AI1	datapg	5432	ais	0	1	ais	pg	aisu	password	def_set	0	5
 so148	so148	6	gif		AI1	datapg	5432	ais	0	1	ais	pg	aisu	password	def_set	0	5
-so148	so148	6	rsf		AI1	datapg	5432	ais	0	1	ais	pg	aisu	password	def_set	0	5
+so148	so148	6	sbf		AI1	datapg	5432	ais	0	1	ais	pg	aisu	password	dps4d_sbf	0	5
 ml10l	ml10l	6	gif		AI1	datapg	5432	ais	0	1	ais	pg	aisu	password	def_set	0	5
 ro041	roold	6	sao	\N	DP0	datapg	5432	ais	1	1	ais	pg	aisu	password	dps_auto	0	5
 rm041	rm041	6	txt	\N	AI1	datapg	5432	ais	1	1	ais	pg	aisu	password	ais_auto	0	5
@@ -253,12 +256,14 @@ ais_rdf	class_ais_rdf.php	\N
 ais_sao	class_ais_measure_sao.php	\N
 dps_auto	class_dps_sao.php	\N
 dps4d_xml	class_dps4d_xml.php	\N
+dps4d_sbf	class_dps4d_sbf.php	\N
 hf_ncfc	class_hf_nc_fc.php	\N
 nov_gps	class_novatel_gps.php	\N
 nov_multi	class_novatel_multi.php	\N
 ismr_sept	class_septentrio.php	\N
 tec_ncfc	class_tec.php	\N
 raw_sept	class_septentrio.php	\N
+eu_tid	class_stf_eu_lstid.php	\N
 \.
 
 

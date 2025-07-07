@@ -129,7 +129,7 @@ class ais_sao_file
         }
         catch (PDOException $e) {
             fn_debug_query_e($sql, $appo, $out, $e);
-            echo "ERROR CONNECTIN DB ";
+            echo "ERROR DB CONNECTION ";
             $stmt->closeCursor();
             $stmt = null;
             return ;
@@ -149,7 +149,7 @@ class ais_sao_file
             catch (PDOException $e) {
                 fn_debug_query_e($sql, $appo, $out, $e);
                 $stmt->closeCursor();
-                echo "ERROR CONNECTIN DB ";
+                echo "ERROR DB CONNECTION ";
                 return ;
             }
             $sql = createAisAutoView($this -> station, $this->isPostgres);
@@ -163,7 +163,7 @@ class ais_sao_file
             catch (PDOException $e) {
                 fn_debug_query_e($sql, $appo, $out, $e);
                 $stmt->closeCursor();
-                echo "ERROR CONNECTIN DB ";
+                echo "ERROR DB CONNECTION ";
                 return ;
             }
         }
@@ -182,7 +182,7 @@ class ais_sao_file
         }
         catch (PDOException $e) {
             fn_debug_query_e($sql, $appo, $this, $e);
-            echo "ERROR CONNECTIN DB ";
+            echo "ERROR DB CONNECTION ";
             $stmt->closeCursor();
             $stmt = null;
             return ;

@@ -1,0 +1,8 @@
+docker run --rm \
+    -u eswua:eswua \
+    -w /home/eswua/ \
+    -v /data/knmi:/data \
+    -v /data/swit/input/hermes:/dest \
+    -e VERBOSE=2 \
+    -e CODE_LIST='SABA SEUT' \
+    ingv-knmi:1.0 $1

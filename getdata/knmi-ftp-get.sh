@@ -11,15 +11,10 @@ if [ -z "$1" ]; then
 fi
 
 NDAY=$1
-CODE_LIST='SABA SEUT'
-VERBOSE=1
-#
-STORE_DIR="/mnt/sandata/data/knmi/"
-DEST_DIR="/mnt/sandata/prod/swit/input/hermes/"
-NFILE=0
+STORE_DIR="/data/"
+DEST_DIR="/dest"
 
-STORE_DIR="/data/knmi/"
-DEST_DIR="/data/swit/input/hermes/"
+NFILE=0
 for CODE in ${CODE_LIST} ; do
     FILECP=0
     for ((i=0; i<${NDAY}; i++)) ; do
@@ -30,7 +25,10 @@ for CODE in ${CODE_LIST} ; do
         mkdir -p ${STORE_DIR}log
         mkdir -p ${CUR_DIR_STORE}
         #
-        docker run --rm -u 6666:6666 -v ${STORE_DIR}log:/data -v ${CUR_DIR_STORE}:/store gingv:0.3 rclone copy --log-level=INFO --log-file /data/out.log knmi:${CUR_DIR}/ /store/
+        #docker run --rm -u 6666:6666 -v ${STORE_DIR}log:/data -v ${CUR_DIR_STORE}:/store gingv:0.3 rclone copy --log-level=INFO --log-file /data/out.log knmi:${CUR_DIR}/ /store/
+
+        rclone copy --log-level=INFO --log-file ${STORE_DIR}log/out.log knmi:${CUR_DIR}/ ${CUR_DIR_STORE}/
+
         grep ismr ${STORE_DIR}log/out.log | awk '{print $5}' | sed s/:// > ${STORE_DIR}log/knmi.lst
         for fn in `cat ${STORE_DIR}log/knmi.lst`; do
             cp ${CUR_DIR_STORE}$fn ${DEST_DIR}

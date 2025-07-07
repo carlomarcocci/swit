@@ -1,0 +1,4 @@
+docker run --rm \
+    -v /data/swit/input/hermes:/dest \
+    ingv-gdata:1.0 $1 $2 
+

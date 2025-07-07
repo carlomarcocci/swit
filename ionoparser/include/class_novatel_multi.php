@@ -631,7 +631,7 @@ class novam_file {
         }
         catch (PDOException $e) {
             fn_debug_query_e($sql, $appo, $out, $e);
-            echo "ERROR CONNECTIN DB ";
+            echo "ERROR DB CONNECTION ";
             $stmt->closeCursor();
             $stmt = null;
             return ;

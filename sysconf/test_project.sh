@@ -16,12 +16,18 @@ echo "# ######################################################################"
 echo "    fill input dir"
 echo "# ######################################################################"
 
-find ${TESTDATA} -type f -exec cp {} /data/swit/input/ais/ \;
-
+find ${TESTDATA} -type f -exec cp -f {} /data/swit/input/ais/ \;
+gunzip -f /data/swit/input/ais/*.gz
 echo ""
+echo "-- --"
 echo "    run iparse to pupulate dbs"
 echo "# ######################################################################"
 
-docker exec iparser_ais ./load_dir stoppa 0
-# per il workaround dei file zippati di dps4d
-docker exec iparser_ais ./load_dir stoppa 0
+#docker exec iparser_ais ./load_dir stoppa 0
+# NON viene testato il problema dei file zippati di dps4d
+
+for i in `ls /data/swit/input/ais/`; do
+    echo "$i"
+    ./ionoparser/run_iparser $i
+    echo ""
+done

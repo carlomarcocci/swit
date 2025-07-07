@@ -1,0 +1,12 @@
+FROM debian:bullseye-slim  
+
+ENV DEBIAN_FRONTEND=noninteractive  
+
+RUN apt-get update -y
+RUN apt-get install openssh-client rsync -y
+COPY secrets/sshHermes.nogit/* /root/.ssh/
+RUN chown -R root:root /root/.ssh/
+#
+COPY hermes_get_file.sh /opt/
+
+ENTRYPOINT ["/opt/hermes_get_file.sh"]

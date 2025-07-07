@@ -1,4 +1,3 @@
-version: '3'
 services:
     datapg:
         container_name: datapg
@@ -139,6 +138,41 @@ services:
             - default
         restart: always
 
+    switws:
+        container_name: switws
+        image: ingv-switws:1.0
+        environment:
+            AIS_POSTGRES_PASSWORD: $AIS_USER_PASSWORD
+            SCINTILLATION_POSTGRES_PASSWORD: $SCINT_USER_PASSWORD
+            TECDB_POSTGRES_PASSWORD: $TECDB_USER_PASSWORD
+            HFF_POSTGRES_PASSWORD: $HFF_USER_PASSWORD
+        ports:
+            - '8080:5000'
+        networks:
+            default:
+                ipv4_address: 172.18.1.102
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_switws"
+        depends_on:
+            - wscache
+        restart: always
+
+    wscache:
+        container_name: wscache
+        image: redis:6.2-alpine
+        networks:
+            default:
+        #        ipv4_address: 172.18.1.101
+        volumes:
+            - $REDIS_DATASTORAGE:/data/redis
+        logging:
+            driver: syslog
+            options:
+                tag: "swit_wscache"
+        command: redis-server --loglevel verbose
+        restart: always
 networks:
     default:
         driver: bridge

@@ -1,7 +1,7 @@
 # switdb.yml
 #host: switdb.rm.ingv.it
-#port: 5434
-host: 172.17.0.1
+#port: 5432
+host: datapg
 port: 5432
 database: scint
 user: wsreader

@@ -1,9 +1,11 @@
 #!/bin/bash
 
-DRYRUN=0        # 0 or 1
-VERBOSE=0       # 0 or 1
-SSHTIMEOUT=10   # int value
-DAYSONHERMES=10
+# variables defined in docker run command
+# 
+# DRYRUN=0        # 0 or 1
+# VERBOSE=0       # 0 or 1
+# SSHTIMEOUT=10   # int value
+# DAYSONHERMES=10
 
 if [ $DRYRUN -gt 0 ] ; then
     RSYNC="rsync -axlv --dry-run --timeout=${SSHTIMEOUT} --exclude=.* "
@@ -14,12 +16,10 @@ fi
 USER_DMC="isacco_dmc"
 USER_MZS="isacco_mzs"
 HOST="hermes.enea.pnra.it"
-STORAGEDIR="/mnt/hermes/"
-DEST="/mnt/input/"
+STORAGEDIR="/data/"
+DEST="/dest/"
 
-# STORAGEDIR="/mnt/sandata/data/hermes/"
-# DEST="/mnt/sandata/prod/swit/input/hermes/"
-
+# isacco_dmc@hermes.enea.pnra.it
 # ##############################################à
 
 # MZS

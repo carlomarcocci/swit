@@ -101,9 +101,12 @@ class ais_rdf_file
                 $k = 0;
                 for ($j = 0; $j < $n_freq; ++$j) {
                     for ($i = 0; $i < $n_height; ++$i) {
-       //array in cui ogni elemento è un array associativo con coppie chiave->valore per frequenza, altitudine, intensità echo (approssimati alla seconda cifra decimale)
-                        //$list[$k] = ['f' => round(($this->freq_start) + ($this->freq_step) * $j, 2), 'h' => round(90 + 4.5 * $i, 2), 'm' => ord(substr($body, $k))];
-                        $list[] = ['h' => round(90 + 4.5 * $i, 2), 'f' => round(($this->freq_start) + ($this->freq_step) * $j, 2), 'm' => ord(substr($body, $k))];
+                        // array in cui ogni elemento è un array associativo con coppie chiave->valore 
+                        // per frequenza, altitudine, intensità echo (approssimati alla seconda cifra 
+                        // decimale)
+                        $list[] = [ 'h' => round(90 + 4.5 * $i, 2),
+                                    'f' => round(($this->freq_start) + ($this->freq_step) * $j, 2), 
+                                    'm' => ord(substr($body, $k))];
                         $k = $k + 1;
                     }
                 }
@@ -176,7 +179,7 @@ class ais_rdf_file
         }
         catch (PDOException $e) {
             fn_debug_query($stmt, $appo, $out);
-            echo "ERROR CONNECTIN DB ";
+            echo "ERROR DB CONNECTION ";
             $stmt->closeCursor();
             return ;
         }
@@ -215,7 +218,7 @@ class ais_rdf_file
         	} 
             catch (PDOException $e) {
                 //fn_debug_query_e($sql, $appo, $out. $e);
-                echo "ERROR CONNECTIN DB ";
+                echo "ERROR DB CONNECTION ";
                 return ;
             }
             $stmt->closeCursor();
@@ -296,7 +299,7 @@ class ais_rdf_file
             $out = $outapp['0'];
             $out = array(
                 "err_code"      => 0,
-                "err_message"   => "OK_INSERTED ". $this->station .  " ". $this->dt
+                "err_message"   => "OK_LOADED ". $this->station .  " ". $this->dt
             );
         }
         catch (PDOException $e)

@@ -15,11 +15,12 @@ RUN rm -rf /var/lib/apt/lists/*
 # create user and group 
 RUN groupadd -g 6666 eswua
 RUN useradd eswua -u 6666 -g 6666 -m -s /bin/bash
+RUN mkdir -p /home/eswua/.config/rclone/
+COPY ./secrets/rclone.conf.knmi.nogit /home/eswua/.config/rclone/rclone.conf
+COPY knmi-ftp-get.sh /home/eswua/
+# 
+RUN chown eswua:eswua /home/eswua/.config/rclone/rclone.conf
+RUN chown eswua:eswua /home/eswua/knmi-ftp-get.sh
+RUN chmod 775 /home/eswua/knmi-ftp-get.sh
 
-#CMD ["./compiled/main"]
-#
-# docker commit 
-# docker images
-# docker tag 38ace96e53ba gingv:0.3
-# docker image save gingv:0.3 > /home/carlo/Downloads/data/gingv.0.3.tar 
-# docker load -i gingv.0.3.tar
+ENTRYPOINT ["./knmi-ftp-get.sh"]

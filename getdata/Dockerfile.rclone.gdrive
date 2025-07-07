@@ -1,0 +1,19 @@
+FROM debian:bookworm-slim  
+
+ENV DEBIAN_FRONTEND=noninteractive  
+
+RUN apt-get -q update && apt-get upgrade -y 
+RUN apt-get install -y \
+      rsync \
+      rclone \
+      wget \
+      sshfs \
+      bash
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/* 
+
+COPY ./secrets/rclone.conf.gais_gingv.nogit /root/.config/rclone/rclone.conf
+COPY get-gdata.sh /
+
+ENTRYPOINT ["./get-gdata.sh"]
+#CMD ["./get-gdata.sh"]

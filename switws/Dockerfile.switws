@@ -2,8 +2,6 @@
 
 FROM python:3.11.0
 
-MAINTAINER Massimo Viola <massimo.viola@ingv.it> version: 1.0
-
 WORKDIR /srv
 
 RUN apt-get update && \
@@ -17,5 +15,8 @@ RUN pip install --upgrade pip && \
 
 COPY healthcheck.sh /home/healthcheck.sh
 RUN chmod +x /home/healthcheck.sh
+
+COPY ./ws /srv
+COPY ./ws/config /etc/switws/config/
 
 CMD ["python3","wsgi.py"]

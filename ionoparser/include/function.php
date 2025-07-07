@@ -451,6 +451,35 @@ function createAisAutoView($sta, $isPG){
     return $sql;
 } 
 
+function createDps4dRawTable($sta, $isPG){
+            $sql = "CREATE TABLE ".$sta."_raw"." (".
+                "dt             timestamp       NOT  NULL,".
+                "fromfile       text            NULL DEFAULT NULL,".
+                "producer       varchar(255)    NULL DEFAULT NULL,".
+                "rxid           int             NULL DEFAULT NULL,".
+                "txid           int             NULL DEFAULT NULL,".
+                "start_f        float           NULL DEFAULT NULL,".
+                "coarse_step_f  float           NULL DEFAULT NULL,".
+                "stop_f         float           NULL DEFAULT NULL,".
+                "o_x_option     float           NULL DEFAULT NULL,".
+                "pulsereprate   float           NULL DEFAULT NULL,".
+                "range_start    float           NULL DEFAULT NULL,".
+                "range_increment    float       NULL DEFAULT NULL,".
+                "number_heights     int         NULL DEFAULT NULL,".
+                "number_range_bins  int         NULL DEFAULT NULL,".
+                "base_gain          float       NULL DEFAULT NULL,".
+                "const_gain         float       NULL DEFAULT NULL,".
+                "frequency_group_len float      NULL DEFAULT NULL,".
+                "freq_group_number_per_block float  NULL DEFAULT NULL,".
+                "ionogram           jsonb       NULL DEFAULT NULL,".
+                "inserted           timestamp   DEFAULT current_timestamp,".
+                "modified           timestamp   DEFAULT current_timestamp,".
+                "PRIMARY KEY  (dt)".
+                ");";
+    return $sql;
+}
+
+
 function createAisRevTable($sta, $isPG){
             $sql =" CREATE TABLE ".$sta."_rev (".
                 " dt                timestamp,".
@@ -981,23 +1010,78 @@ function fn_read_ursi_saoXml(SimpleXMLElement $node, $fname){
     return($elemVal);
 }
 
-function fn_IsNullOrEmpty($str) {
-    return $str === null || $str == "";
+function fn_isNull($str): bool
+{
+    if (!isset($str) || is_null($str)) {
+        return true;
+    }
+    if (is_string($str) && trim($str) === '') {
+        return true;
+    }
+    return false;
 }
 
-function fn_IsNullOrEmptyLunga($str) {
-    $ret='inizio';
-    if (isset($str)){
-        $ret = " notset";
-    } elseif ($str === null){
-        $ret = " nulla";
-    } elseif ( $str == "") {
-        $ret = " vuota";
+function binCodDec($byte) {
+    if ( is_numeric($byte) ) {
+        $high = 10 * (($byte & 0xf0) >> 4);
+        $low = $byte & 0x0f;
+        return $high + $low;
     } else {
-        $ret = " else";
+        return null;
     }
-    return $ret;
-//    return $str === null || trim($str) === '';
+}
+
+function createStfEuLstid($sta, $isPG){
+            $sql =" CREATE TABLE ".$sta." (".
+                    " dt timestamp PRIMARY KEY, ".
+                    " dt_run timestamp NOT NULL, ".
+                    " fromfile text NOT NULL,".
+                    " lstid_occurrence_probability float NOT NULL, ".
+                    " lstid_high_precision_prediction float NOT NULL, ".
+                    " lstid_balanced_prediction integer NOT NULL, ".
+                    " lstid_high_sensitivity_prediction integer NOT NULL, ".
+                    " input_availability_score float NOT NULL, ".
+                    " input_availability_alert boolean NOT NULL DEFAULT 'FALSE', ".
+                    " ie float DEFAULT NULL, ".
+                    " ie_variation integer DEFAULT NULL, ".
+                    " ie_3h_exp_mov_avg float DEFAULT NULL, ".
+                    " ie_12h_exp_mov_avg float DEFAULT NULL, ".
+                    " iu float DEFAULT NULL, ".
+                    " iu_variation integer DEFAULT NULL, ".
+                    " iu_3h_exp_mov_avg float DEFAULT NULL, ".
+                    " iu_12h_exp_mov_avg float DEFAULT NULL, ".
+                    " hf_int float DEFAULT NULL, ".
+                    " hf_int_2h_exp_mov_avg float DEFAULT NULL, ".
+                    " f_107_adj float DEFAULT NULL, ".
+                    " hp_30 float DEFAULT NULL, ".
+                    " dst float DEFAULT NULL, ".
+                    " solar_zenith_angle float DEFAULT NULL, ".
+                    " newell float DEFAULT NULL, ".
+                    " imf_bz float DEFAULT NULL, ".
+                    " imf_speed float DEFAULT NULL, ".
+                    " imf_rho float DEFAULT NULL, ".
+                    " spectral_contribution_at float DEFAULT NULL, ".
+                    " spectral_contribution_ff float DEFAULT NULL, ".
+                    " spectral_contribution_jr float DEFAULT NULL, ".
+                    " spectral_contribution_pq float DEFAULT NULL, ".
+                    " spectral_contribution_ro float DEFAULT NULL, ".
+                    " spectral_contribution_vt float DEFAULT NULL, ".
+                    " azimuth_at float DEFAULT NULL, ".
+                    " azimuth_ff float DEFAULT NULL, ".
+                    " azimuth_jr float DEFAULT NULL, ".
+                    " azimuth_pq float DEFAULT NULL, ".
+                    " azimuth_ro float DEFAULT NULL, ".
+                    " azimuth_vt float DEFAULT NULL, ".
+                    " velocity_at float DEFAULT NULL, ".
+                    " velocity_ff float DEFAULT NULL, ".
+                    " velocity_jr float DEFAULT NULL, ".
+                    " velocity_pq float DEFAULT NULL, ".
+                    " velocity_ro float DEFAULT NULL, ".
+                    " velocity_vt float DEFAULT NULL, ".
+                    " modified timestamp NOT NULL ".
+                    " );";
+
+    return $sql;
 }
 
 ?>

@@ -21,3 +21,5 @@ RUN apt-get install php-pgsql -y
 RUN apt-get install php-mbstring -y
 RUN apt-get install php-gd -y
 
+ENTRYPOINT ["php iono_parse.php -f "]
+

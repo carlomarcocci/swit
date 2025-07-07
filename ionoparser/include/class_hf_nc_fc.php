@@ -155,7 +155,7 @@ class hf_nc_fc {
         }
         catch (PDOException $e) {
             fn_debug_query_e($sql, $appo, $out, $e);
-            echo "ERROR CONNECTIN DB ";
+            echo "ERROR DB CONNECTION ";
             $stmt->closeCursor();
             $stmt = null;
             return ;
@@ -177,7 +177,7 @@ class hf_nc_fc {
             catch (PDOException $e) {
                 fn_debug_query_e($sql, $appo, $out, $e);
                 $stmt->closeCursor();
-                echo "ERROR CONNECTIN DB ";
+                echo "ERROR DB CONNECTION ";
 //                retrn ;
             }
         }
@@ -197,7 +197,7 @@ class hf_nc_fc {
         }
         catch (PDOException $e) {
             fn_debug_query_e($sql, $appo, $this, $e);
-            echo "ERROR CONNECTIN DB ";
+            echo "ERROR DB CONNECTION ";
             $stmt->closeCursor();
             $stmt = null;
             return ;
