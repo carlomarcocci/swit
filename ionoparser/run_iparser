@@ -1,6 +1,6 @@
 docker run --rm \
     -w /iparser \
-    -v /data/swit/input/ais:/data/ \
+    -v /data/swit/input/tec_json:/data/ \
     -v /data/swit/backup/bkfile:/backup \
     -e IPARSER_SWIT_HOST=datapg \
     -e IPARSER_SWIT_PORT=5432 \
@@ -9,5 +9,5 @@ docker run --rm \
     -e IPARSER_SWIT_PASS=password \
     --network swit_default \
     marcarlo/iparser:3.2 \
-    php iono_parse.php -f /data/$1
+    ./load_dir stop.run 0
 

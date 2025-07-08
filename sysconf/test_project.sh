@@ -26,8 +26,4 @@ echo "# ######################################################################"
 #docker exec iparser_ais ./load_dir stoppa 0
 # NON viene testato il problema dei file zippati di dps4d
 
-for i in `ls /data/swit/input/ais/`; do
-    echo "$i"
-    ./ionoparser/run_iparser $i
-    echo ""
-done
+./ionoparser/run_iparser
